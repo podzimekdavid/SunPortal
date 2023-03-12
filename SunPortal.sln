@@ -1,0 +1,75 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Cloud", "Cloud", "{DB1ADA91-11AD-4176-B41D-93AAFB62936D}"
+	ProjectSection(SolutionItems) = preProject
+		docker-compose.yml = docker-compose.yml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ClientApp", "ClientApp", "{01AB13B5-D9F1-43E7-9240-5839ECF93F87}"
+	ProjectSection(SolutionItems) = preProject
+		StuderReader.dll = StuderReader.dll
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SunPortal.Communication", "SunPortal.Communication\SunPortal.Communication.csproj", "{EDA03A4A-5774-4F64-A5EB-17AFDAA911D5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SunPortal.Client", "SunPortal.Client\SunPortal.Client.csproj", "{6DAAA064-9D76-4B6A-A373-A06F0F379E35}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SunPortal.Cloud.Lib", "SunPortal.Cloud.Lib\SunPortal.Cloud.Lib.csproj", "{CA8A42DA-6070-4D02-A3CF-1A4C0CEB143A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SunPortal.Cloud.Service.Database", "SunPortal.Cloud.Service.Database\SunPortal.Cloud.Service.Database.csproj", "{4E810B37-7316-49F2-B05B-E37241D5BA09}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SunPortal.Cloud.Service.Communication", "SunPortal.Cloud.Service.Communication\SunPortal.Cloud.Service.Communication.csproj", "{0939A7DC-E741-47C3-A2DB-DB45E4761D35}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SunPortal.Cloud.Services.Portal", "SunPortal.Cloud.Services.Portal\SunPortal.Cloud.Services.Portal.csproj", "{BC07898E-E87C-42EC-AB60-A389B581C265}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Env", "Env", "{D5576674-2B1A-497E-AD24-C68B7C6569CD}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SunPortal.Cloud.Proxy", "SunPortal.Cloud.Proxy\SunPortal.Cloud.Proxy.csproj", "{B7DF9F0A-9CDF-49B7-BEEB-A69178672761}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EDA03A4A-5774-4F64-A5EB-17AFDAA911D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EDA03A4A-5774-4F64-A5EB-17AFDAA911D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EDA03A4A-5774-4F64-A5EB-17AFDAA911D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EDA03A4A-5774-4F64-A5EB-17AFDAA911D5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6DAAA064-9D76-4B6A-A373-A06F0F379E35}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6DAAA064-9D76-4B6A-A373-A06F0F379E35}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6DAAA064-9D76-4B6A-A373-A06F0F379E35}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6DAAA064-9D76-4B6A-A373-A06F0F379E35}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CA8A42DA-6070-4D02-A3CF-1A4C0CEB143A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CA8A42DA-6070-4D02-A3CF-1A4C0CEB143A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CA8A42DA-6070-4D02-A3CF-1A4C0CEB143A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CA8A42DA-6070-4D02-A3CF-1A4C0CEB143A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4E810B37-7316-49F2-B05B-E37241D5BA09}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4E810B37-7316-49F2-B05B-E37241D5BA09}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4E810B37-7316-49F2-B05B-E37241D5BA09}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4E810B37-7316-49F2-B05B-E37241D5BA09}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0939A7DC-E741-47C3-A2DB-DB45E4761D35}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0939A7DC-E741-47C3-A2DB-DB45E4761D35}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0939A7DC-E741-47C3-A2DB-DB45E4761D35}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0939A7DC-E741-47C3-A2DB-DB45E4761D35}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BC07898E-E87C-42EC-AB60-A389B581C265}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BC07898E-E87C-42EC-AB60-A389B581C265}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BC07898E-E87C-42EC-AB60-A389B581C265}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BC07898E-E87C-42EC-AB60-A389B581C265}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B7DF9F0A-9CDF-49B7-BEEB-A69178672761}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B7DF9F0A-9CDF-49B7-BEEB-A69178672761}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B7DF9F0A-9CDF-49B7-BEEB-A69178672761}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B7DF9F0A-9CDF-49B7-BEEB-A69178672761}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{6DAAA064-9D76-4B6A-A373-A06F0F379E35} = {01AB13B5-D9F1-43E7-9240-5839ECF93F87}
+		{CA8A42DA-6070-4D02-A3CF-1A4C0CEB143A} = {DB1ADA91-11AD-4176-B41D-93AAFB62936D}
+		{4E810B37-7316-49F2-B05B-E37241D5BA09} = {DB1ADA91-11AD-4176-B41D-93AAFB62936D}
+		{0939A7DC-E741-47C3-A2DB-DB45E4761D35} = {DB1ADA91-11AD-4176-B41D-93AAFB62936D}
+		{BC07898E-E87C-42EC-AB60-A389B581C265} = {DB1ADA91-11AD-4176-B41D-93AAFB62936D}
+		{B7DF9F0A-9CDF-49B7-BEEB-A69178672761} = {DB1ADA91-11AD-4176-B41D-93AAFB62936D}
+	EndGlobalSection
+EndGlobal
