@@ -1,0 +1,45 @@
+version: '3.8'
+services:
+  database-pg:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: Cw4bUHEzMepVPaLH9vc
+      POSTGRES_USER: SunPortal
+      POSTGRES_DB: SunPortalDatabase
+    ports:
+      - "5432:5432"
+    volumes:
+      - database_data:/var/lib/postgresql/data
+  portal:
+    build:
+      context: ./SunPortal.Cloud.Services.Portal/
+      dockerfile: Dockerfile
+    restart: always
+    volumes:
+       - portal_persistent_storage:/app/data
+  communication:
+    build:
+      context: ./SunPortal.Cloud.Service.Communication/
+      dockerfile: Dockerfile
+    restart: always
+  database:
+    build:
+      context: ./SunPortal.Cloud.Service.Database/
+      dockerfile: Dockerfile
+    restart: always
+  proxy:
+    build:
+      context: ./SunPortal.Cloud.Proxy/
+      dockerfile: Dockerfile
+    restart: always
+    volumes:
+      - certs:/etc/proxy/certs
+    ports:
+      - "80:80"
+      - "443:443"
+volumes:
+  database_data:
+  certs:
+  portal_persistent_storage:
+
