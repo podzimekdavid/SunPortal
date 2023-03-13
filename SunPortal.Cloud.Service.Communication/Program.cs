@@ -1,11 +1,9 @@
 using SunPortal.Cloud.Service.Communication.Hub;
+using SunPortal.Communication;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddSignalR();
@@ -23,7 +21,7 @@ app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
-app.MapHub<CommunicationHub>("/gateway");
+app.MapHub<CommunicationHub>(Connection.HUB_PATH);
 app.MapControllers();
 
 app.Run();
