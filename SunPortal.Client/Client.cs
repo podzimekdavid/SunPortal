@@ -6,11 +6,11 @@ using SunPortal.Communication.Packets;
 
 namespace SunPortal.Client;
 
-public class Client
+public class Client : IDisposable
 {
     private HubConnection _hub;
 
-    private Studer _studer;
+    private readonly Studer _studer;
 
     public Client(string comPort)
     {
@@ -29,6 +29,13 @@ public class Client
         _hub.On<ValueRequest>(Connection.ClientMethods.VALUE_REQUEST, ValueRequested);
 
         await _hub.StartAsync();
+
+        Register();
+    }
+
+    private async void Register()
+    {
+        await _hub.InvokeAsync(Connection.ServerMethods.REGISTER, ClientId);
     }
 
     private async void ValueRequested(ValueRequest request)
@@ -54,5 +61,10 @@ public class Client
 
             return data?.Object;
         }
+    }
+
+    public void Dispose()
+    {
+        //TODO: logout
     }
 }

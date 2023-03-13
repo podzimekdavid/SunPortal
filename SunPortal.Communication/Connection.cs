@@ -13,5 +13,6 @@ public class Connection
     public class ServerMethods
     {
         public const string VALUE_RESPONSE = "ValueResponseReceived";
+        public const string REGISTER = "Register";
     }
 }
