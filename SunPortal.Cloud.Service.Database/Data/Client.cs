@@ -7,5 +7,7 @@ public class Client
 
     public string? Name { get; set; }
     
+    public string OwnerId { get; set; }
+    
     public virtual IEnumerable<ClientDevice> Devices { get; set; }
 }

@@ -6,7 +6,7 @@ namespace SunPortal.Cloud.Service.Communication.Controllers;
 
 public class CommunicationController : Controller
 {
-    private readonly CommunicationHub _hub;
+    /*private readonly CommunicationHub _hub;
 
     public CommunicationController(CommunicationHub hub)
     {
@@ -22,5 +22,5 @@ public class CommunicationController : Controller
             Address = address,
             RequestId = Guid.NewGuid()
         }, clientId));
-    }
+    }*/
 }

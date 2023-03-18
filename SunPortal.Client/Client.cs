@@ -30,6 +30,7 @@ public class Client : IDisposable
 
         await _hub.StartAsync();
 
+        Console.WriteLine(_hub.State);
         Register();
     }
 
@@ -40,6 +41,7 @@ public class Client : IDisposable
 
     private async void ValueRequested(ValueRequest request)
     {
+        Console.WriteLine(request.RequestId);
         await _hub.InvokeAsync(Connection.ServerMethods.VALUE_RESPONSE, new ValueResponse()
         {
             RequestId = request.RequestId,

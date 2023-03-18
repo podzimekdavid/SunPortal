@@ -1,4 +1,6 @@
+using Microsoft.AspNet.SignalR;
 using SunPortal.Cloud.Service.Communication.Hub;
+using SunPortal.Cloud.Service.Communication.Services;
 using SunPortal.Communication;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -7,6 +9,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddSignalR();
+builder.Services.AddHostedService<CommunicationService>();
 
 var app = builder.Build();
 
