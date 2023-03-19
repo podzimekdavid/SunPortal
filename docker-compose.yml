@@ -1,23 +1,23 @@
 version: '3.8'
 services:
-#  database-pg:
-#    image: postgres
-#    restart: always
-#    environment:
-#      POSTGRES_PASSWORD: Cw4bUHEzMepVPaLH9vc
-#      POSTGRES_USER: SunPortal
-#      POSTGRES_DB: SunPortalDatabase
-#    ports:
-#      - "5432:5432"
-#    volumes:
-#      - database_data:/var/lib/postgresql/data
+  database-pg:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: Cw4bUHEzMepVPaLH9vc
+      POSTGRES_USER: SunPortal
+      POSTGRES_DB: SunPortalDatabase
+    ports:
+      - "5432:5432" #temporary exposed (development)
+    volumes:
+      - database_data:/var/lib/postgresql/data
   portal:
     build:
       context: .
       dockerfile: SunPortal.Cloud.Services.Portal/Dockerfile
     restart: always
     volumes:
-       - portal_persistent_storage:/app/data
+      - portal_persistent_storage:/app/data
     depends_on:
       rabbitmq:
         condition: service_healthy
@@ -28,15 +28,20 @@ services:
     restart: always
     depends_on:
       rabbitmq:
-          condition: service_healthy        
+        condition: service_healthy
     ports:
       - "9080:80"
       - "9443:443"
-#  database:
-#    build:
-#      context: ./SunPortal.Cloud.Service.Database/
-#      dockerfile: Dockerfile
-#    restart: always
+  database:
+    build:
+      context: ./SunPortal.Cloud.Service.Database/
+      dockerfile: Dockerfile
+    restart: always
+    depends_on:
+      database-pg:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
   proxy:
     build:
       context: .

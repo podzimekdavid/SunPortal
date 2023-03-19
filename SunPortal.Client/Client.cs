@@ -11,9 +11,11 @@ public class Client : IDisposable
     private HubConnection _hub;
 
     private readonly Studer _studer;
+    private bool _debug;
 
-    public Client(string comPort)
+    public Client(string comPort,bool debug = false )
     {
+        _debug = debug;
         _studer = new Studer(comPort);
     }
 
@@ -38,11 +40,15 @@ public class Client : IDisposable
 
     private void ChangeParameterRequested(ChangeParameterRequest request)
     {
-        Console.ForegroundColor = ConsoleColor.DarkCyan;
-        Console.WriteLine(request.ParameterId);
-        Console.WriteLine(request.Address);
-        Console.WriteLine(BitConverter.ToBoolean(request.Value, 0));
-        Console.ResetColor();
+        if (_debug)
+        {
+            Console.ForegroundColor = ConsoleColor.DarkCyan;
+            Console.WriteLine(request.ParameterId);
+            Console.WriteLine(request.Address);
+            //Console.WriteLine(BitConverter.ToBoolean(request.Value, 0));
+            Console.ResetColor();
+
+        }
 
         SetParameter((ushort) request.ParameterId, request.Address, request.Value);
     }
@@ -54,9 +60,13 @@ public class Client : IDisposable
 
     private async void ValueRequested(ValueRequest request)
     {
-        Console.ForegroundColor = ConsoleColor.Yellow;
-        Console.WriteLine(request.ParameterId);
-        Console.ResetColor();
+        if (_debug)
+        {
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine(request.ParameterId);
+            Console.ResetColor();
+        }
+
         await _hub.InvokeAsync(Connection.ServerMethods.VALUE_RESPONSE, new ValueResponse()
         {
             RequestId = request.RequestId,
@@ -74,11 +84,11 @@ public class Client : IDisposable
                 OperationType.Read,
                 new UserInfo(parameterId, UserInfo.Property.Value));
 
-            Console.WriteLine(address);
+            //Console.WriteLine(address);
             var data = _studer.SendAndReceiveFrame(frame);
 
 
-            Console.WriteLine(BitConverter.ToSingle(data.Object.Data, 0));
+            //Console.WriteLine(BitConverter.ToSingle(data.Object.Data, 0));
             return data.Object.Data;
         }
     }

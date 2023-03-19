@@ -21,6 +21,6 @@ public class Parameter
     public virtual ParameterGroup ParameterGroup { get; set; }
 
     public string? Unit { get; set; }
-    public bool Writable { get; set; }
+   // public bool Writable { get; set; }
     public bool LogParameter { get; set; } = false; //TODO: useful?? 
 }
