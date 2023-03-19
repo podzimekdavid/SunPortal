@@ -12,5 +12,5 @@ public class CommunicationValueRequest
     
     public int Address { get; set; }
     public int Parameter { get; set; }
-    public string ParameterType { get; set; }
+   // public string ParameterType { get; set; }
 }

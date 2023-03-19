@@ -20,6 +20,7 @@ public class CommunicationService : IDisposable
     private readonly IHubContext<CommunicationHub> _hub;
     private IModel? _valueRequestChannel;
     private IModel? _valueResponseChannel;
+    private IModel? _changeParameterRequestChannel;
 
     private readonly ILogger<CommunicationService> _log;
 
@@ -49,6 +50,7 @@ public class CommunicationService : IDisposable
     {
         _valueRequestChannel = _connection.CreateModel();
         _valueResponseChannel = _connection.CreateModel();
+        _changeParameterRequestChannel = _connection.CreateModel();
 
         _valueRequestChannel.QueueDeclare(queue: Lib.Communication.RMQ_REQUEST_CHANNEL,
             durable: false,
@@ -61,13 +63,44 @@ public class CommunicationService : IDisposable
             exclusive: false,
             autoDelete: false,
             arguments: null);
+        
+        _changeParameterRequestChannel.QueueDeclare(queue: Lib.Communication.RMQ_CHANGE_PARAMETER_REQUEST_CHANNEL,
+            durable: false,
+            exclusive: false,
+            autoDelete: false,
+            arguments: null);
 
-        var consumer = new EventingBasicConsumer(_valueRequestChannel);
-        consumer.Received += RequestReceived;
+        var consumerValue = new EventingBasicConsumer(_valueRequestChannel);
+        consumerValue.Received += RequestReceived;
 
         _valueRequestChannel.BasicConsume(queue: Lib.Communication.RMQ_REQUEST_CHANNEL,
             autoAck: true,
-            consumer: consumer);
+            consumer: consumerValue);
+
+        var consumerChange = new EventingBasicConsumer(_changeParameterRequestChannel);
+        consumerChange.Received += ChangeParameterRequestReceived;
+
+       _changeParameterRequestChannel.BasicConsume(queue: Lib.Communication.RMQ_CHANGE_PARAMETER_REQUEST_CHANNEL,
+            autoAck: true,
+            consumer: consumerChange);
+       
+    }
+    
+    private void ChangeParameterRequestReceived(object? model, BasicDeliverEventArgs args)
+    {
+        var request = args.Body.ToArray().ToObject<CommunicationChangeParameterRequest>();
+
+        if (request == null)
+            return;
+        //_log.LogInformation($"Change request received {request.RequestId}");
+        
+        SendChangeParameterRequest(new()
+        {
+            RequestId = request.RequestId,
+            Address = request.Address,
+            ParameterId = request.Parameter,
+            Value = request.Value
+        },request.ClientId);
     }
 
     private void RequestReceived(object? model, BasicDeliverEventArgs args)
@@ -126,7 +159,20 @@ public class CommunicationService : IDisposable
         
         var id = _clients[clientId];
 
-        _hub.Clients.All.SendAsync(Connection.ClientMethods.VALUE_REQUEST, request);
+        _hub.Clients.Client(id).SendAsync(Connection.ClientMethods.VALUE_REQUEST, request);
+    }
+    
+    private void SendChangeParameterRequest(ChangeParameterRequest request, Guid clientId)
+    {
+        if (!_clients.ContainsKey(clientId))
+        {
+            _log.LogError($"Client not found {clientId}");
+            return;
+        }
+        
+        var id = _clients[clientId];
+
+        _hub.Clients.Client(id).SendAsync(Connection.ClientMethods.CHANGE_PARAMETER_REQUEST, request);
     }
 
     public Task StartAsync(CancellationToken cancellationToken)

@@ -17,6 +17,7 @@ public class ClientCommunicationService:IDisposable
     private readonly Dictionary<Guid, Guid> _requests;
     private IModel? _valueRequestChannel;
     private IModel? _valueResponseChannel;
+    private IModel? _changeParameterRequestChannel;
 
     private readonly ILogger<ClientCommunicationService> _log;
 
@@ -51,6 +52,7 @@ public class ClientCommunicationService:IDisposable
     {
         _valueRequestChannel = _connection.CreateModel();
         _valueResponseChannel = _connection.CreateModel();
+        _changeParameterRequestChannel = _connection.CreateModel();
 
         _valueRequestChannel.QueueDeclare(queue: Lib.Communication.RMQ_REQUEST_CHANNEL,
             durable: false,
@@ -59,6 +61,12 @@ public class ClientCommunicationService:IDisposable
             arguments: null);
         
         _valueResponseChannel.QueueDeclare(queue: Lib.Communication.RMQ_RESPONSE_CHANNEL,
+            durable: false,
+            exclusive: false,
+            autoDelete: false,
+            arguments: null);
+        
+        _changeParameterRequestChannel.QueueDeclare(queue: Lib.Communication.RMQ_CHANGE_PARAMETER_REQUEST_CHANNEL,
             durable: false,
             exclusive: false,
             autoDelete: false,
@@ -101,11 +109,21 @@ public class ClientCommunicationService:IDisposable
             basicProperties: null,
             body: request.ToMessage());
     }
+    
+    public void SendChangeParameterRequest(CommunicationChangeParameterRequest request, Guid deviceId)
+    {
+        //_log.LogError(request.RequestId.ToString());
+        _changeParameterRequestChannel.BasicPublish(exchange: "",
+            routingKey: Communication.RMQ_CHANGE_PARAMETER_REQUEST_CHANNEL,
+            basicProperties: null,
+            body: request.ToMessage());
+    }
 
     public void Dispose()
     {
         _connection.Dispose();
         _valueRequestChannel?.Dispose();
         _valueResponseChannel?.Dispose();
+        _changeParameterRequestChannel?.Dispose();
     }
 }

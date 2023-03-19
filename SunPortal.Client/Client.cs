@@ -27,11 +27,24 @@ public class Client : IDisposable
             .Build();
 
         _hub.On<ValueRequest>(Connection.ClientMethods.VALUE_REQUEST, ValueRequested);
+        _hub.On<ChangeParameterRequest>(Connection.ClientMethods.CHANGE_PARAMETER_REQUEST, ChangeParameterRequested);
 
         await _hub.StartAsync();
 
         Console.WriteLine(_hub.State);
         Register();
+        
+    }
+
+    private void ChangeParameterRequested(ChangeParameterRequest request)
+    {
+        Console.ForegroundColor = ConsoleColor.DarkCyan;
+        Console.WriteLine(request.ParameterId);
+        Console.WriteLine(request.Address);
+        Console.WriteLine(BitConverter.ToBoolean(request.Value, 0));
+        Console.ResetColor();
+
+        SetParameter((ushort) request.ParameterId, request.Address, request.Value);
     }
 
     private async void Register()
@@ -41,7 +54,9 @@ public class Client : IDisposable
 
     private async void ValueRequested(ValueRequest request)
     {
+        Console.ForegroundColor = ConsoleColor.Yellow;
         Console.WriteLine(request.ParameterId);
+        Console.ResetColor();
         await _hub.InvokeAsync(Connection.ServerMethods.VALUE_RESPONSE, new ValueResponse()
         {
             RequestId = request.RequestId,
@@ -59,12 +74,21 @@ public class Client : IDisposable
                 OperationType.Read,
                 new UserInfo(parameterId, UserInfo.Property.Value));
 
-           Console.WriteLine(address);
+            Console.WriteLine(address);
             var data = _studer.SendAndReceiveFrame(frame);
 
-          
-           Console.WriteLine(BitConverter.ToSingle(data.Object.Data,0));
+
+            Console.WriteLine(BitConverter.ToSingle(data.Object.Data, 0));
             return data.Object.Data;
+        }
+    }
+
+    private void SetParameter(ushort parameterId, int address, byte[] value)
+    {
+        lock (_studer)
+        {
+            _studer.SendAndReceiveFrame(new Frame(Address.Me, Address.Inverter(address), OperationType.Write,
+                new Parameter(parameterId, Parameter.Property.UnsavedValueQsp, value)));
         }
     }
 
