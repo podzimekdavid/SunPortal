@@ -1,16 +1,17 @@
 using System.Text;
-using Microsoft.AspNet.SignalR;
+using Microsoft.AspNetCore.SignalR;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using SunPortal.Cloud.Lib.Extensions;
 using SunPortal.Cloud.Lib.Models;
 using SunPortal.Cloud.Service.Communication.Hub;
+using SunPortal.Communication;
 using SunPortal.Communication.Packets;
 using IConnection = RabbitMQ.Client.IConnection;
 
 namespace SunPortal.Cloud.Service.Communication.Services;
 
-public class CommunicationService : IHostedService, IDisposable
+public class CommunicationService : IDisposable
 {
     private readonly Dictionary<Guid, string> _clients = new();
 
@@ -18,11 +19,11 @@ public class CommunicationService : IHostedService, IDisposable
     private readonly IConfiguration _configuration;
     private readonly IHubContext<CommunicationHub> _hub;
     private IModel? _valueRequestChannel;
+    private IModel? _valueResponseChannel;
 
     private readonly ILogger<CommunicationService> _log;
 
-    private const string RMQ_CONFIG_PREFIX = "RabbitMQ:";
-    private const string RMQ_REQUEST_CHANNEL = "ValueRequests";
+   
 
     public CommunicationService(IConfiguration configuration, ILogger<CommunicationService> log,
         IHubContext<CommunicationHub> hub)
@@ -38,17 +39,24 @@ public class CommunicationService : IHostedService, IDisposable
     {
         return new ConnectionFactory()
         {
-            HostName = _configuration.GetValue<string>($"{RMQ_CONFIG_PREFIX}Address"),
-            UserName = _configuration.GetValue<string>($"{RMQ_CONFIG_PREFIX}User"),
-            Password = _configuration.GetValue<string>($"{RMQ_CONFIG_PREFIX}Password"),
+            HostName = _configuration.GetValue<string>($"{Lib.Communication.RMQ_CONFIG_PREFIX}Address"),
+            UserName = _configuration.GetValue<string>($"{Lib.Communication.RMQ_CONFIG_PREFIX}User"),
+            Password = _configuration.GetValue<string>($"{Lib.Communication.RMQ_CONFIG_PREFIX}Password"),
         };
     }
 
     private void Init()
     {
         _valueRequestChannel = _connection.CreateModel();
+        _valueResponseChannel = _connection.CreateModel();
 
-        _valueRequestChannel.QueueDeclare(queue: RMQ_REQUEST_CHANNEL,
+        _valueRequestChannel.QueueDeclare(queue: Lib.Communication.RMQ_REQUEST_CHANNEL,
+            durable: false,
+            exclusive: false,
+            autoDelete: false,
+            arguments: null);
+        
+        _valueResponseChannel.QueueDeclare(queue: Lib.Communication.RMQ_RESPONSE_CHANNEL,
             durable: false,
             exclusive: false,
             autoDelete: false,
@@ -56,8 +64,8 @@ public class CommunicationService : IHostedService, IDisposable
 
         var consumer = new EventingBasicConsumer(_valueRequestChannel);
         consumer.Received += RequestReceived;
-        
-        _valueRequestChannel.BasicConsume(queue: RMQ_REQUEST_CHANNEL,
+
+        _valueRequestChannel.BasicConsume(queue: Lib.Communication.RMQ_REQUEST_CHANNEL,
             autoAck: true,
             consumer: consumer);
     }
@@ -68,6 +76,7 @@ public class CommunicationService : IHostedService, IDisposable
 
         if (request == null)
             return;
+        //_log.LogInformation($"Request received {request.RequestId}");
 
         SendRequest(new()
         {
@@ -77,6 +86,31 @@ public class CommunicationService : IHostedService, IDisposable
         }, request.ClientId);
     }
 
+    public void ResponseReceived(ValueResponse response)
+    {
+        CommunicationValueResponse model = new()
+        {
+            RequestId = response.RequestId,
+            Data = response.Data,
+            ReceivedData = DateTime.Now
+        };
+        
+        _valueRequestChannel.BasicPublish(exchange: "",
+            routingKey: Lib.Communication.RMQ_RESPONSE_CHANNEL,
+            basicProperties: null,
+            body: model.ToMessage());
+    }
+
+    public void AddClient(string connectionId, Guid clientId)
+    {
+        if (_clients.ContainsKey(clientId))
+            _clients[clientId] = connectionId;
+        else
+            _clients.Add(clientId, connectionId);
+        
+        _log.LogInformation($"Client registered {clientId}, clients count {_clients.Count}");
+    }
+
     public void Dispose()
     {
         _connection.Dispose();
@@ -84,9 +118,15 @@ public class CommunicationService : IHostedService, IDisposable
 
     private void SendRequest(ValueRequest request, Guid clientId)
     {
+        if (!_clients.ContainsKey(clientId))
+        {
+            _log.LogError($"Client not found {clientId}");
+            return;
+        }
+        
         var id = _clients[clientId];
 
-        _hub.Clients.All.Request(id, request);
+        _hub.Clients.All.SendAsync(Connection.ClientMethods.VALUE_REQUEST, request);
     }
 
     public Task StartAsync(CancellationToken cancellationToken)

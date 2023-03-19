@@ -1,9 +1,47 @@
 ﻿@page "/"
+@using SunPortal.Cloud.Services.Portal.Services
+@using SunPortal.Cloud.Lib.Models
+@using SunPortal.Cloud.Lib.Extensions
+@inject ClientCommunicationService Client
 
-<PageTitle>Index</PageTitle>
+<input type="number" @bind="_parameter" class="form-control"/>
+<button class="btn" @onclick="Test">Request</button>
 
-<h1>Hello, world!</h1>
+@foreach (var response in _responses)
+{
+    <div>
+      @response.ReceivedData:  @(BitConverter.ToSingle(response.Data,0) )
+    </div>
+}
 
-Welcome to your new app.
 
-<SurveyPrompt Title="How is Blazor working for you?"/>
+
+@code
+{
+    private int _parameter = 3000;
+    private Guid _tempId = Guid.NewGuid();
+
+    private List<CommunicationValueResponse> _responses = new();
+
+    protected override void OnInitialized()
+    {
+        Client.OnResponseReceived += OnResponseReceived;
+    }
+
+    private async void OnResponseReceived(CommunicationValueResponse response, Guid deviceId)
+    {
+        _responses.Add(response);
+
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private void Test()
+    {
+        Client.SendRequest(new CommunicationValueRequest()
+        {
+            Address = 1,
+            ClientId = Guid.Parse("20692a7a-fa21-47ae-a2a0-bd11b3ea0be0"),
+            Parameter = _parameter,
+        }, _tempId);
+    }
+}

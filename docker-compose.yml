@@ -18,11 +18,20 @@ services:
     restart: always
     volumes:
        - portal_persistent_storage:/app/data
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
   communication:
     build:
       context: .
       dockerfile: SunPortal.Cloud.Service.Communication/Dockerfile
     restart: always
+    depends_on:
+      rabbitmq:
+          condition: service_healthy        
+    ports:
+      - "9080:80"
+      - "9443:443"
 #  database:
 #    build:
 #      context: ./SunPortal.Cloud.Service.Database/
@@ -49,6 +58,11 @@ services:
       - RABBITMQ_DEFAULT_PASS=Z5qTm4D95Ezv3Sf7
     volumes:
       - rabbitmq:/var/lib/rabbitmq
+    healthcheck:
+      test: [ "CMD", "rabbitmqctl", "status" ]
+      interval: 10s
+      timeout: 5s
+      retries: 3
 volumes:
   database_data:
   certs:

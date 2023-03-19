@@ -41,7 +41,7 @@ public class Client : IDisposable
 
     private async void ValueRequested(ValueRequest request)
     {
-        Console.WriteLine(request.RequestId);
+        Console.WriteLine(request.ParameterId);
         await _hub.InvokeAsync(Connection.ServerMethods.VALUE_RESPONSE, new ValueResponse()
         {
             RequestId = request.RequestId,
@@ -50,7 +50,7 @@ public class Client : IDisposable
         });
     }
 
-    private object? ReadValue(ushort parameterId, int address)
+    private byte[]? ReadValue(ushort parameterId, int address)
     {
         lock (_studer)
         {
@@ -59,9 +59,12 @@ public class Client : IDisposable
                 OperationType.Read,
                 new UserInfo(parameterId, UserInfo.Property.Value));
 
+           Console.WriteLine(address);
             var data = _studer.SendAndReceiveFrame(frame);
 
-            return data?.Object;
+          
+           Console.WriteLine(BitConverter.ToSingle(data.Object.Data,0));
+            return data.Object.Data;
         }
     }
 

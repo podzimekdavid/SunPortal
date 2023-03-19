@@ -8,47 +8,30 @@ namespace SunPortal.Cloud.Service.Communication.Hub;
 
 public class CommunicationHub : Microsoft.AspNetCore.SignalR.Hub
 {
-    
-    private readonly CommunicationService _service;
+    private readonly CommunicationService _communicationService;
+    private ILogger<CommunicationHub> _log;
 
-    public CommunicationHub(CommunicationService service)
+    public CommunicationHub(ILogger<CommunicationHub> log, CommunicationService communicationService)
     {
-        _service = service;
+        _log = log;
+        _communicationService = communicationService;
     }
 
-    public async void Request(string connectionString, ValueRequest request)
-    {
-        await Clients.Client(connectionString).SendAsync(Connection.ClientMethods.VALUE_REQUEST,request);
-    }
-
-    /*public async Task<ValueResponse?> Request(ValueRequest request, Guid clientId)
-    {
-        if (_clients.ContainsKey(clientId))
-        {
-            return await WaitForResponse();
-        }
-
-        return null;
-    }
-
-    private TaskCompletionSource<ValueResponse> _response;
-
-    private Task<ValueResponse> WaitForResponse()
-    {
-        _response = new TaskCompletionSource<ValueResponse>();
-        return _response.Task;
-    }*/
 
     public void ValueResponseReceived(ValueResponse response)
     {
-        //_response.SetResult(response);
+        _communicationService.ResponseReceived(response);
     }
 
     public void Register(Guid clientId)
     {
-        /*if (_clients.ContainsKey(clientId))
-            _clients[clientId] = Context.ConnectionId;
-        else
-            _clients.Add(clientId, Context.ConnectionId);*/
+        _log.LogInformation($"Hub client register {clientId}");
+        _communicationService.AddClient(Context.ConnectionId, clientId);
+    }
+
+    public override Task OnConnectedAsync()
+    {
+        _log.LogInformation($"Hub client connected {Context.ConnectionId}");
+        return base.OnConnectedAsync();
     }
 }
