@@ -8,6 +8,8 @@ public class SupportedDevice
     public string? Description { get; set; }
     public string? ManufactureWebsiteUrl { get; set; }
     
+    //TODO: image url
+    
     public int ParameterGroupId { get; set; }
     public virtual ParameterGroup ParameterGroup { get; set; }
     

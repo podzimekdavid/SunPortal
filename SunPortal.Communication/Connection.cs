@@ -7,6 +7,7 @@ public class Connection
     public class ClientMethods
     {
         public const string VALUE_REQUEST = "ValueRequested";
+        public const string CHANGE_PARAMETER_REQUEST = "ChangeParameterRequested";
     }
     
 

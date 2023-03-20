@@ -11,9 +11,11 @@ public class Client : IDisposable
     private HubConnection _hub;
 
     private readonly Studer _studer;
+    private bool _debug;
 
-    public Client(string comPort)
+    public Client(string comPort,bool debug = false )
     {
+        _debug = debug;
         _studer = new Studer(comPort);
     }
 
@@ -27,10 +29,28 @@ public class Client : IDisposable
             .Build();
 
         _hub.On<ValueRequest>(Connection.ClientMethods.VALUE_REQUEST, ValueRequested);
+        _hub.On<ChangeParameterRequest>(Connection.ClientMethods.CHANGE_PARAMETER_REQUEST, ChangeParameterRequested);
 
         await _hub.StartAsync();
 
+        Console.WriteLine(_hub.State);
         Register();
+        
+    }
+
+    private void ChangeParameterRequested(ChangeParameterRequest request)
+    {
+        if (_debug)
+        {
+            Console.ForegroundColor = ConsoleColor.DarkCyan;
+            Console.WriteLine(request.ParameterId);
+            Console.WriteLine(request.Address);
+            //Console.WriteLine(BitConverter.ToBoolean(request.Value, 0));
+            Console.ResetColor();
+
+        }
+
+        SetParameter((ushort) request.ParameterId, request.Address, request.Value);
     }
 
     private async void Register()
@@ -40,6 +60,13 @@ public class Client : IDisposable
 
     private async void ValueRequested(ValueRequest request)
     {
+        if (_debug)
+        {
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine(request.ParameterId);
+            Console.ResetColor();
+        }
+
         await _hub.InvokeAsync(Connection.ServerMethods.VALUE_RESPONSE, new ValueResponse()
         {
             RequestId = request.RequestId,
@@ -48,7 +75,7 @@ public class Client : IDisposable
         });
     }
 
-    private object? ReadValue(ushort parameterId, int address)
+    private byte[]? ReadValue(ushort parameterId, int address)
     {
         lock (_studer)
         {
@@ -57,9 +84,21 @@ public class Client : IDisposable
                 OperationType.Read,
                 new UserInfo(parameterId, UserInfo.Property.Value));
 
+            //Console.WriteLine(address);
             var data = _studer.SendAndReceiveFrame(frame);
 
-            return data?.Object;
+
+            //Console.WriteLine(BitConverter.ToSingle(data.Object.Data, 0));
+            return data.Object.Data;
+        }
+    }
+
+    private void SetParameter(ushort parameterId, int address, byte[] value)
+    {
+        lock (_studer)
+        {
+            _studer.SendAndReceiveFrame(new Frame(Address.Me, Address.Inverter(address), OperationType.Write,
+                new Parameter(parameterId, Parameter.Property.UnsavedValueQsp, value)));
         }
     }
 

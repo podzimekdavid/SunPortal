@@ -8,7 +8,7 @@ public static class Program
     {
         try
         {
-            var client = new Client(args[0])
+            var client = new Client(args[0], args.Length >= 4 ? bool.Parse(args[3]) : false)
             {
                 ClientId = Guid.Parse(args[1]),
                 Url = args.Length > 2 ? args[2] : "http://localhost:5114" // <-- Debug

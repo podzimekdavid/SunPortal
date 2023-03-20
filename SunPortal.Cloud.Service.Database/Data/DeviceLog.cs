@@ -3,7 +3,7 @@
 public class DeviceLog
 {
     public int DeviceLogId { get; set; }
-    public string Value { get; set; } = string.Empty;
+    public string Value { get; set; } = string.Empty; //TODO: byte[]
     public DateTimeOffset DateTime { get; set; }
     
     public int ParameterId { get; set; }
