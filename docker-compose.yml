@@ -11,6 +11,11 @@ services:
       - "5432:5432" #temporary exposed (development)
     volumes:
       - database_data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
   portal:
     build:
       context: .
@@ -34,8 +39,8 @@ services:
       - "9443:443"
   database:
     build:
-      context: ./SunPortal.Cloud.Service.Database/
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: SunPortal.Cloud.Service.Database/Dockerfile
     restart: always
     depends_on:
       database-pg:
