@@ -10,7 +10,8 @@ public class DatabaseContext : DbContext
     public DbSet<Parameter> Parameters { get; set; }
     public DbSet<ParameterGroup> ParameterGroups { get; set; }
     public DbSet<SupportedDevice> SupportedDevices { get; set; }
-    
+    public DbSet<GroupChart> Charts { get; set; }
+
     public DatabaseContext(DbContextOptions<DatabaseContext> options) : base(options)
     {
         AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
