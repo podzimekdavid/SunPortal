@@ -39,8 +39,8 @@ services:
       - "9443:443"
   database:
     build:
-      context: ./SunPortal.Cloud.Service.Database/
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: SunPortal.Cloud.Service.Database/Dockerfile
     restart: always
     depends_on:
       database-pg:
