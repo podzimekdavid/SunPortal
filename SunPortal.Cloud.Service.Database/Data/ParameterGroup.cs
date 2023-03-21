@@ -2,7 +2,7 @@
 
 public class ParameterGroup
 {
-    public int GroupParameterId { get; set; }
+    public int ParameterGroupId { get; set; }
     public string? Name { get; set; }
     public string? Description { get; set; }
     

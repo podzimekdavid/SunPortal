@@ -8,9 +8,14 @@ services:
       POSTGRES_USER: SunPortal
       POSTGRES_DB: SunPortalDatabase
     ports:
-      - "5432:5432" #temporary exposed (development)
+      - "7779:5432" #temporary exposed (development)
     volumes:
       - database_data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
   portal:
     build:
       context: .
