@@ -1,4 +1,6 @@
-﻿namespace SunPortal.Cloud.Service.Database.Data;
+﻿using SunPortal.Cloud.Lib.UI;
+
+namespace SunPortal.Cloud.Service.Database.Data;
 
 public class ParameterGroup
 {
@@ -8,5 +10,6 @@ public class ParameterGroup
     
     public virtual IEnumerable<SupportedDevice> SupportedDevices { get; set; }
     public virtual IEnumerable<Parameter> Parameters { get; set; }
+    public virtual IEnumerable<GroupChart> Charts { get; set; }
 
 }
