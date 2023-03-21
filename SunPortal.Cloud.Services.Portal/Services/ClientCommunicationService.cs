@@ -105,7 +105,7 @@ public class ClientCommunicationService:IDisposable
         _requests.Add(request.RequestId, deviceId);
 
         _valueRequestChannel.BasicPublish(exchange: "",
-            routingKey: Communication.RMQ_REQUEST_CHANNEL,
+            routingKey: Lib.Communication.RMQ_REQUEST_CHANNEL,
             basicProperties: null,
             body: request.ToMessage());
     }
@@ -114,7 +114,7 @@ public class ClientCommunicationService:IDisposable
     {
         //_log.LogError(request.RequestId.ToString());
         _changeParameterRequestChannel.BasicPublish(exchange: "",
-            routingKey: Communication.RMQ_CHANGE_PARAMETER_REQUEST_CHANNEL,
+            routingKey: Lib.Communication.RMQ_CHANGE_PARAMETER_REQUEST_CHANNEL,
             basicProperties: null,
             body: request.ToMessage());
     }
