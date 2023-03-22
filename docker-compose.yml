@@ -1,6 +1,6 @@
 version: '3.8'
 services:
-  database-pg:
+  database-data:
     image: postgres
     restart: always
     environment:
@@ -16,6 +16,22 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+  database-users:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: AB8mQJvvzP9gvQBU
+      POSTGRES_USER: SunPortal
+      POSTGRES_DB: SunPortalDatabase
+    ports:
+      - "7789:5432" #temporary exposed (development)
+    volumes:
+      - database_account:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
   portal:
     build:
       context: .
@@ -26,6 +42,8 @@ services:
     depends_on:
       rabbitmq:
         condition: service_healthy
+      database-users:
+        condition: service_healthy
   communication:
     build:
       context: .
@@ -34,16 +52,16 @@ services:
     depends_on:
       rabbitmq:
         condition: service_healthy
-#    ports:
-#      - "9980:80"
-#      - "9443:443"
+  #    ports:
+  #      - "9980:80"
+  #      - "9443:443"
   database:
     build:
       context: .
       dockerfile: SunPortal.Cloud.Service.Database/Dockerfile
     restart: always
     depends_on:
-      database-pg:
+      database-data:
         condition: service_healthy
       rabbitmq:
         condition: service_healthy
@@ -78,4 +96,5 @@ volumes:
   certs:
   portal_persistent_storage:
   rabbitmq:
+  database_account:
 
