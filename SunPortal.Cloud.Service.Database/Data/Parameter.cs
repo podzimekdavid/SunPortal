@@ -16,6 +16,7 @@ public class Parameter
     public ParameterType Type { get; set; }
     public ParameterMode Mode { get; set; }
     public ParameterLevel Level { get; set; }
+    public ParameterPriority Priority { get; set; }
 
     public int ParameterGroupId { get; set; }
     public virtual ParameterGroup ParameterGroup { get; set; }

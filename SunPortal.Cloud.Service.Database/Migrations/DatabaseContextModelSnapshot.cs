@@ -97,6 +97,32 @@ namespace SunPortal.Cloud.Service.Database.Migrations
                     b.ToTable("Logs");
                 });
 
+            modelBuilder.Entity("SunPortal.Cloud.Service.Database.Data.GroupChart", b =>
+                {
+                    b.Property<int>("GroupChartId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("GroupChartId"));
+
+                    b.Property<int>("ParameterGroupId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("YParameterId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("YType")
+                        .HasColumnType("integer");
+
+                    b.HasKey("GroupChartId");
+
+                    b.HasIndex("ParameterGroupId");
+
+                    b.HasIndex("YParameterId");
+
+                    b.ToTable("Charts");
+                });
+
             modelBuilder.Entity("SunPortal.Cloud.Service.Database.Data.Parameter", b =>
                 {
                     b.Property<int>("ParameterId")
@@ -115,6 +141,9 @@ namespace SunPortal.Cloud.Service.Database.Migrations
                         .HasColumnType("integer");
 
                     b.Property<int>("ParameterGroupId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Priority")
                         .HasColumnType("integer");
 
                     b.Property<int>("Type")
@@ -215,6 +244,25 @@ namespace SunPortal.Cloud.Service.Database.Migrations
                     b.Navigation("Parameter");
                 });
 
+            modelBuilder.Entity("SunPortal.Cloud.Service.Database.Data.GroupChart", b =>
+                {
+                    b.HasOne("SunPortal.Cloud.Service.Database.Data.ParameterGroup", "ParameterGroup")
+                        .WithMany("Charts")
+                        .HasForeignKey("ParameterGroupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SunPortal.Cloud.Service.Database.Data.Parameter", "YParameter")
+                        .WithMany()
+                        .HasForeignKey("YParameterId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ParameterGroup");
+
+                    b.Navigation("YParameter");
+                });
+
             modelBuilder.Entity("SunPortal.Cloud.Service.Database.Data.Parameter", b =>
                 {
                     b.HasOne("SunPortal.Cloud.Service.Database.Data.ParameterGroup", "ParameterGroup")
@@ -249,6 +297,8 @@ namespace SunPortal.Cloud.Service.Database.Migrations
 
             modelBuilder.Entity("SunPortal.Cloud.Service.Database.Data.ParameterGroup", b =>
                 {
+                    b.Navigation("Charts");
+
                     b.Navigation("Parameters");
 
                     b.Navigation("SupportedDevices");
