@@ -25,6 +25,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Env", "Env", "{D5576674-2B1A-497E-AD24-C68B7C6569CD}"
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
+		..\..\..\Desktop\import_basic_parameters.csv = ..\..\..\Desktop\import_basic_parameters.csv
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SunPortal.Cloud.Proxy", "SunPortal.Cloud.Proxy\SunPortal.Cloud.Proxy.csproj", "{B7DF9F0A-9CDF-49B7-BEEB-A69178672761}"
