@@ -6,8 +6,8 @@
 @using Microsoft.AspNetCore.Identity
 
 @inject IDevicesService Devices
+@inject AuthenticationStateProvider AuthenticationStateProvider
 @inject UserManager<IdentityUser> UserManager
-@inject IHttpContextAccessor Context
 
 @foreach (var client in _clients)
 {
@@ -25,7 +25,8 @@
         if (firstRender)
         {
             //if (Context.HttpContext?.User != null)
-                _clients = await Devices.ClientsByOwner(UserManager.GetUserId(Context.HttpContext.User));
+            var state = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+                _clients = await Devices.ClientsByOwner(UserManager.GetUserId(state.User));
 
             StateHasChanged();
         }
