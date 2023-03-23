@@ -6,4 +6,10 @@ public class Communication
     public const string RMQ_RESPONSE_CHANNEL = "ValueRespons";
     public const string RMQ_CHANGE_PARAMETER_REQUEST_CHANNEL = "ChangeParameterReguests";
     public const string RMQ_CONFIG_PREFIX = "RabbitMQ:";
+    
+    public class Endpoints
+    {
+        public const string DEVICES = "/devices";
+        public const string PARAMETERS = "/parameters/byDevice";
+    }
 }
