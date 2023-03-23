@@ -7,24 +7,30 @@ namespace SunPortal.Cloud.Service.Database.Controllers;
 
 public class DevicesController : Controller
 {
-    private readonly DevicesService _devicesService;
+    private readonly Lib.Interfaces.IDevicesService _devicesesService;
 
-    public DevicesController(DevicesService devicesService)
+    public DevicesController(Lib.Interfaces.IDevicesService devicesesService)
     {
-        _devicesService = devicesService;
+        _devicesesService = devicesesService;
     }
 
-    [HttpGet(Lib.Communication.Endpoints.DEVICES)]
-    public IEnumerable<Lib.App.Client> Devices(string ownerId)
+    [HttpGet(Lib.Communication.Endpoints.CLIENTS)]
+    public IEnumerable<Client>? Clients(string ownerId)
     {
-        return _devicesService.ClientsByOwner(ownerId);
+        return _devicesesService.ClientsByOwner(ownerId).Result;
     }
 
     [HttpGet(Lib.Communication.Endpoints.PARAMETERS)]
-    public IEnumerable<Lib.App.DeviceParameter> Parameters(Guid deviceId, ParameterPriority? priority = null)
+    public IEnumerable<Lib.App.DeviceParameter>? Parameters(Guid deviceId, ParameterPriority? priority = null)
     {
         return priority.HasValue ? 
-            _devicesService.ParametersByDevice(deviceId, priority.Value) : 
-            _devicesService.ParametersByDevice(deviceId);
+            _devicesesService.ParametersByDevice(deviceId, priority.Value).Result : 
+            _devicesesService.ParametersByDevice(deviceId).Result;
+    }
+    
+    [HttpGet(Lib.Communication.Endpoints.DEVICES)]
+    public IEnumerable<Lib.App.Device>? Devices(Guid deviceId)
+    {
+        return _devicesesService.DevicesByClient(deviceId).Result;
     }
 }

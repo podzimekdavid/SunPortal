@@ -1,70 +1,35 @@
-﻿@page "/"
-@using SunPortal.Cloud.Services.Portal.Services
-@using SunPortal.Cloud.Lib.Models
-@using SunPortal.Cloud.Lib.Extensions
-@inject ClientCommunicationService Client
+﻿@attribute [Authorize]
+@page "/"
+@using SunPortal.Cloud.Lib.Interfaces
+@using SunPortal.Cloud.Lib.App
+@using System.Collections
+@using Microsoft.AspNetCore.Identity
 
-<input type="number" @bind="_parameter" class="form-control"/>
-<button class="btn" @onclick="Test">Request</button> <button class="btn" @onclick="On">On</button> <button class="btn" @onclick="Off">Off</button>
+@inject IDevicesService Devices
+@inject UserManager<IdentityUser> UserManager
+@inject IHttpContextAccessor Context
 
-@foreach (var response in _responses)
+@foreach (var client in _clients)
 {
     <div>
-      @response.ReceivedData:  @(BitConverter.ToSingle(response.Data,0) )
+        @client.Name
     </div>
 }
 
+@code{
 
+    private IEnumerable<Client> _clients = new List<Client>();
 
-@code
-{
-    private int _parameter = 3000;
-    private Guid _tempId = Guid.NewGuid();
-    private Guid _testClient = Guid.Parse("20692a7a-fa21-47ae-a2a0-bd11b3ea0be0");
-
-    private List<CommunicationValueResponse> _responses = new();
-
-    protected override void OnInitialized()
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        Client.OnResponseReceived += OnResponseReceived;
-    }
-
-    private async void OnResponseReceived(CommunicationValueResponse response, Guid deviceId)
-    {
-        _responses.Add(response);
-
-        await InvokeAsync(StateHasChanged);
-    }
-
-    private void Test()
-    {
-        Client.SendRequest(new CommunicationValueRequest()
+        if (firstRender)
         {
-            Address = 1,
-            ClientId =_testClient,
-            Parameter = _parameter,
-        }, _tempId);
+            if (Context.HttpContext?.User != null)
+                await Devices.ClientsByOwner(UserManager.GetUserId(Context.HttpContext.User));
+            
+            StateHasChanged();
+        }
     }
 
-    private void On()
-    {
-        Client.SendChangeParameterRequest(new ()
-        {
-            Address = 1,
-            ClientId =_testClient,
-            Parameter = 1415,
-            Value = BitConverter.GetBytes(1)
-        },_tempId);
-    }
-    
-    private void Off()
-    {
-        Client.SendChangeParameterRequest(new ()
-        {
-            Address = 1,
-            ClientId =_testClient,
-            Parameter = 1399,
-            Value = BitConverter.GetBytes(1)
-        },_tempId);
-    }
+
 }

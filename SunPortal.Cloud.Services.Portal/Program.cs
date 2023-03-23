@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.EntityFrameworkCore;
+using SunPortal.Cloud.Lib.Interfaces;
 using SunPortal.Cloud.Services.Portal.Areas.Identity;
 using SunPortal.Cloud.Services.Portal.Data;
 using SunPortal.Cloud.Services.Portal.Services;
@@ -24,6 +25,7 @@ builder.Services.AddServerSideBlazor();
 builder.Services
     .AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
 builder.Services.AddSingleton<ClientCommunicationService>();
+builder.Services.AddScoped<IDevicesService, DevicesesCommunicationService>();
 
 var app = builder.Build();
 

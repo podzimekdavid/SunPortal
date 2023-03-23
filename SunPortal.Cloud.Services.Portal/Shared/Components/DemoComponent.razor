@@ -1,0 +1,68 @@
+@using SunPortal.Cloud.Services.Portal.Services
+@using SunPortal.Cloud.Lib.Models
+@inject ClientCommunicationService Client
+
+<input type="number" @bind="_parameter" class="form-control"/>
+<button class="btn" @onclick="Test">Request</button> <button class="btn" @onclick="On">On</button> <button class="btn" @onclick="Off">Off</button>
+
+@foreach (var response in _responses)
+{
+    <div>
+        @response.ReceivedData:  @(BitConverter.ToSingle(response.Data,0) )
+    </div>
+}
+
+
+
+@code
+{
+    private int _parameter = 3000;
+    private Guid _tempId = Guid.NewGuid();
+    private Guid _testClient = Guid.Parse("20692a7a-fa21-47ae-a2a0-bd11b3ea0be0");
+
+    private List<CommunicationValueResponse> _responses = new();
+
+    protected override void OnInitialized()
+    {
+        Client.OnResponseReceived += OnResponseReceived;
+    }
+
+    private async void OnResponseReceived(CommunicationValueResponse response, Guid deviceId)
+    {
+        _responses.Add(response);
+
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private void Test()
+    {
+        Client.SendRequest(new CommunicationValueRequest()
+        {
+            Address = 1,
+            ClientId =_testClient,
+            Parameter = _parameter,
+        }, _tempId);
+    }
+
+    private void On()
+    {
+        Client.SendChangeParameterRequest(new ()
+        {
+            Address = 1,
+            ClientId =_testClient,
+            Parameter = 1415,
+            Value = BitConverter.GetBytes(1)
+        },_tempId);
+    }
+    
+    private void Off()
+    {
+        Client.SendChangeParameterRequest(new ()
+        {
+            Address = 1,
+            ClientId =_testClient,
+            Parameter = 1399,
+            Value = BitConverter.GetBytes(1)
+        },_tempId);
+    }
+}
