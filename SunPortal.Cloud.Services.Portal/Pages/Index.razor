@@ -25,8 +25,8 @@
         if (firstRender)
         {
             if (Context.HttpContext?.User != null)
-                await Devices.ClientsByOwner(UserManager.GetUserId(Context.HttpContext.User));
-            
+                _clients = await Devices.ClientsByOwner(UserManager.GetUserId(Context.HttpContext.User));
+
             StateHasChanged();
         }
     }
