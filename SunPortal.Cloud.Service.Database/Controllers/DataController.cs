@@ -6,12 +6,13 @@ namespace SunPortal.Cloud.Service.Database.Controllers;
 
 public class DataController:Controller
 {
-    private readonly DatabaseService _databaseService;
+    private readonly DevicesService _devicesService;
 
-    public DataController(DatabaseService databaseService)
+    public DataController(DevicesService devicesService)
     {
-        _databaseService = databaseService;
+        _devicesService = devicesService;
     }
+
 
 
 

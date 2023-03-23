@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using SunPortal.Cloud.Service.Database.Data;
+using SunPortal.Cloud.Service.Database.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +16,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<DatabaseContext>();
+builder.Services.AddScoped<DevicesService>();
 
 var app = builder.Build();
 
