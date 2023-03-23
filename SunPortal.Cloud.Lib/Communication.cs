@@ -9,7 +9,7 @@ public class Communication
     
     public class Endpoints
     {
-        public const string BASE = "http//communication";
+        public const string BASE = "http://communication";
         public const string CLIENTS = "/clients";
         public const string PARAMETERS = "/device/parameters/";
         public const string DEVICES = "/devices/";

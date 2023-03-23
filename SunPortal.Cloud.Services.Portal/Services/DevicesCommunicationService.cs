@@ -5,11 +5,11 @@ using SunPortal.Communication.Parameters;
 
 namespace SunPortal.Cloud.Services.Portal.Services;
 
-public class DevicesesCommunicationService : IDevicesService
+public class DevicesCommunicationService : IDevicesService
 {
     private readonly HttpClient _client;
 
-    public DevicesesCommunicationService()
+    public DevicesCommunicationService()
     {
         _client = new();
         _client.BaseAddress = new(Lib.Communication.Endpoints.BASE);

@@ -25,7 +25,7 @@ builder.Services.AddServerSideBlazor();
 builder.Services
     .AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
 builder.Services.AddSingleton<ClientCommunicationService>();
-builder.Services.AddScoped<IDevicesService, DevicesesCommunicationService>();
+builder.Services.AddScoped<IDevicesService, DevicesCommunicationService>();
 
 var app = builder.Build();
 
