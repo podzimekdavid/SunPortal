@@ -15,7 +15,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<DatabaseContext>();
 
-builder.Services.AddScoped<IDevicesService, DevicesesService>();
+builder.Services.AddScoped<IDevicesService, DevicesService>();
 
 var app = builder.Build();
 

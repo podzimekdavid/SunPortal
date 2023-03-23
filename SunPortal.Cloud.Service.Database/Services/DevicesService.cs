@@ -9,11 +9,11 @@ using Client = SunPortal.Cloud.Lib.App.Client;
 
 namespace SunPortal.Cloud.Service.Database.Services;
 
-public class DevicesesService : IDevicesService
+public class DevicesService : IDevicesService
 {
     private readonly DatabaseContext _database;
 
-    public DevicesesService(DatabaseContext database)
+    public DevicesService(DatabaseContext database)
     {
         _database = database;
     }
