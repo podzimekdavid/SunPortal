@@ -22,10 +22,17 @@ public class DatabaseService
     //    // return Parameters(deviceId).Where(x=>x.)
     // }
     //
-    // private IQueryable<IEnumerable<Parameter>> Parameters(Guid deviceId)
-    // {
-    //    // return _database.ParameterGroups.FirstOrDefault(x=>x.)
-    // }
+    private IQueryable<Parameter> Parameters(Guid deviceId)
+    {
+        var deviceType =
+            _database.SupportedDevices.Include(x=>x.ParameterGroup)
+                .ThenInclude(x=>x.Parameters)
+                .FirstOrDefault(x =>
+                    x.Devices.Any(x =>
+                        x.ClientDeviceId == deviceId));
+
+       // return deviceType.ParameterGroup.Parameters;
+    }
 
     // public IEnumerable<Lib.App.DeviceParameter> ParametersByDevice(Guid deviceId)
     // {
