@@ -9,12 +9,20 @@
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject UserManager<IdentityUser> UserManager
 
-@foreach (var client in _clients)
-{
-    <div>
-        @client.Name
-    </div>
-}
+<MatTable Items="@_clients" class="mat-elevation-z5" ShowPaging="false" UseSortHeaderRow="true">
+    <MatTableHeader>
+        <MatSortHeaderRow>
+            <MatSortHeader SortId="id">Id</MatSortHeader>
+            <MatSortHeader SortId="name">Name</MatSortHeader>
+            <MatSortHeader SortId="count">Devices count</MatSortHeader>
+        </MatSortHeaderRow>
+    </MatTableHeader>
+    <MatTableRow @onclick="() => NavigateDetail(@context.ClientId)">
+        <td>@context.ClientId</td>
+        <td>@context.Name</td>
+        <td></td>
+    </MatTableRow>
+</MatTable>
 
 @code{
 
@@ -24,13 +32,18 @@
     {
         if (firstRender)
         {
-            //if (Context.HttpContext?.User != null)
+    //if (Context.HttpContext?.User != null)
             var state = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-                _clients = await Devices.ClientsByOwner(UserManager.GetUserId(state.User));
+            _clients = await Devices.ClientsByOwner(UserManager.GetUserId(state.User));
 
             StateHasChanged();
         }
     }
 
+
+    private void NavigateDetail(Guid id)
+    {
+        throw new NotImplementedException();
+    }
 
 }

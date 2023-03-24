@@ -1,3 +1,4 @@
+using MatBlazor;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.Authorization;
@@ -26,6 +27,9 @@ builder.Services
     .AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
 builder.Services.AddSingleton<ClientCommunicationService>();
 builder.Services.AddScoped<IDevicesService, DevicesCommunicationService>();
+
+builder.Services.AddHttpClient();
+builder.Services.AddMatBlazor();
 //builder.Services.AddHttpContextAccessor();
 
 var app = builder.Build();
