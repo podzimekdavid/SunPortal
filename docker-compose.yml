@@ -49,6 +49,8 @@ services:
       context: .
       dockerfile: SunPortal.Cloud.Service.Communication/Dockerfile
     restart: always
+    ports:
+      - "7799:5432" #temporary exposed (development)
     depends_on:
       rabbitmq:
         condition: service_healthy
