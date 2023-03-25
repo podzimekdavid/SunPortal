@@ -12,22 +12,48 @@
 
 <div class="mat-elevation-z5 mdc-theme--surface">
     <MatTabGroup>
-        @if (_devices != null)
-        {
-            foreach (Device device in _devices)
-            {
-                <MatTab>
-                    <LabelContent>
-                        @device.DeviceType.Name (@device.Address)
-                    </LabelContent>
-                    <ChildContent>
-                        <section>
-                            Settings
-                        </section>
-                    </ChildContent>
-                </MatTab>
-            }
-        }
+
+        <MatTab>
+            <LabelContent>
+                Devices
+            </LabelContent>
+            <ChildContent>
+                <section>
+                    <MatTable Items="@_devices" ShowPaging="false" UseSortHeaderRow="true" AllowSelection="true" SelectionChanged="SelectionChangedEvent">
+                        <MatTableHeader>
+                            <MatSortHeaderRow>
+                                <MatSortHeader SortId="name">
+                                    <span style="width:200px">Name</span>
+                                </MatSortHeader>
+                                <MatSortHeader SortId="count">
+                                    <span style="width:200px">Address</span>
+                                </MatSortHeader>
+                                <MatSortHeader SortId="count">
+                                    <span style="width:200px">Manufacture</span>
+                                </MatSortHeader>
+                                <MatSortHeader SortId="id">
+                                    <span>Id</span>
+                                </MatSortHeader>
+                            </MatSortHeaderRow>
+                        </MatTableHeader>
+                        <MatTableRow>
+                            <td>
+                                @context.DeviceType.Name <MatIcon Icon="open_in_new" Style="vertical-align: bottom"></MatIcon>
+                            </td>
+                            <td>
+                                @context.Address
+                            </td>
+                            <td>
+                                @context.DeviceType.ManufactureWebsiteUrl
+                            </td>
+                            <td>
+                                @context.ClientDeviceId
+                            </td>
+                        </MatTableRow>
+                    </MatTable>
+                </section>
+            </ChildContent>
+        </MatTab>
         <MatTab>
             <LabelContent>
                 Settings
@@ -60,7 +86,7 @@
 
             _client = await DevicesService.Client(id);
             _devices = await DevicesService.DevicesByClient(id);
-            
+
             StateHasChanged();
         }
     }
