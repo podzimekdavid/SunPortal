@@ -37,12 +37,14 @@ public class DevicesService : IDevicesService
 
     public Task<IEnumerable<DeviceParameter>?> ParametersByDevice(Guid deviceId)
     {
-        return Task.FromResult<IEnumerable<DeviceParameter>?>(Parameters(deviceId).ProjectToType<Lib.App.DeviceParameter>());
+        return Task.FromResult<IEnumerable<DeviceParameter>?>(Parameters(deviceId)
+            .ProjectToType<Lib.App.DeviceParameter>());
     }
 
     public Task<IEnumerable<Client>?> ClientsByOwner(string ownerId)
     {
-        return Task.FromResult<IEnumerable<Client>?>(_database.Clients.Where(x => x.OwnerId == ownerId)
+        return Task.FromResult<IEnumerable<Client>?>(_database.Clients.Include(x => x.Devices)
+            .Where(x => x.OwnerId == ownerId)
             .ProjectToType<Lib.App.Client>(ClientAdapter.DTOConfig));
     }
 
@@ -54,7 +56,7 @@ public class DevicesService : IDevicesService
 
     public Task<Client?> Client(Guid clientId)
     {
-        return Task.FromResult(_database.Clients
-            .First(x => x.ClientId == clientId).Adapt<Lib.App.Client>(ClientAdapter.DTOConfig));
+        return Task.FromResult(_database.Clients.Include(x => x.Devices)
+            .First(x => x.ClientId == clientId).Adapt<Lib.App.Client?>(ClientAdapter.DTOConfig));
     }
 }
