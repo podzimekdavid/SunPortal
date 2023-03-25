@@ -25,22 +25,22 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.Requ
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
 builder.Services.AddAuthentication().AddGoogle(googleOptions =>
-{
-    googleOptions.ClientId = builder.Configuration.GetValue<string>("Authentication:Google:ClientId");
-    googleOptions.ClientSecret = builder.Configuration.GetValue<string>("Authentication:Google:ClientSecret");
-    googleOptions.Events.OnRedirectToAuthorizationEndpoint = context =>
     {
-        context.Response.Redirect(
-            context.RedirectUri.Replace("http://", "https://", StringComparison.OrdinalIgnoreCase));
-        return Task.CompletedTask;
-    };
-});//.AddCookie(options =>
-// {
-//     // add an instance of the patched manager to the options:
-//     options.CookieManager = new ChunkingCookieManager();
-//     options.Cookie.SameSite = SameSiteMode.None;
-//     options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-// });;
+        googleOptions.ClientId = builder.Configuration.GetValue<string>("Authentication:Google:ClientId");
+        googleOptions.ClientSecret = builder.Configuration.GetValue<string>("Authentication:Google:ClientSecret");
+        googleOptions.Events.OnRedirectToAuthorizationEndpoint = context =>
+        {
+            context.Response.Redirect(
+                context.RedirectUri.Replace("http://", "https://", StringComparison.OrdinalIgnoreCase));
+            return Task.CompletedTask;
+        };
+    })
+    .AddCookie(options =>
+    {
+        options.Cookie.SameSite = SameSiteMode.None;
+        options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+        options.Cookie.IsEssential = true;
+    });
 
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
@@ -53,15 +53,15 @@ builder.Services.AddHttpClient();
 builder.Services.AddMatBlazor();
 //builder.Services.AddHttpContextAccessor();
 
-// builder.Services.Configure<ForwardedHeadersOptions>(options =>
-// {
-//     options.ForwardedHeaders =
-//          ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto |
-//                            ForwardedHeaders.XForwardedHost;
-//     options.RequireHeaderSymmetry = false;
-//     options.KnownProxies.Clear();
-//     options.KnownNetworks.Clear();
-// });
+builder.Services.Configure<ForwardedHeadersOptions>(options =>
+{
+    options.ForwardedHeaders =
+        ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto |
+        ForwardedHeaders.XForwardedHost;
+    options.RequireHeaderSymmetry = false;
+    options.KnownProxies.Clear();
+    options.KnownNetworks.Clear();
+});
 
 
 var app = builder.Build();
@@ -75,31 +75,28 @@ else
 {
     app.UseExceptionHandler("/Error");
     app.UseForwardedHeaders();
-    
+
     // app.Use((context, next) =>
     // {
     //     context.Request.Host = new HostString(builder.Configuration.GetValue<string>("Domain:Default"));
     //     context.Request.Scheme = builder.Configuration.GetValue<string>("Domain:Scheme");
     //     return next();
     // });
-    
-    app.UseForwardedHeaders(new ForwardedHeadersOptions
-    {
-        ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
-    });
-        
-    app.Use((context, next) =>
-    {
-        if (context.Request.Headers.TryGetValue("X-Forwarded-Proto", out var protoHeaderValue) &&
-            protoHeaderValue == "https")
-        {
-            context.Request.Scheme = "https";
-        }
-        return next();
-    });
-    
-    app.UseHsts();
 }
+
+app.Use((context, next) =>
+{
+    if (context.Request.Headers.TryGetValue("X-Forwarded-Proto", out var protoHeaderValue) &&
+        protoHeaderValue == "https")
+    {
+        context.Request.Scheme = "https";
+    }
+
+    return next();
+});
+
+app.UseHsts();
+
 
 //app.UseHttpsRedirection();
 
