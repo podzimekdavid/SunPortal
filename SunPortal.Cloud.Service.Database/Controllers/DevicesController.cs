@@ -29,9 +29,9 @@ public class DevicesController : Controller
     }
 
     [HttpGet(Lib.Communication.Endpoints.DEVICES)]
-    public IEnumerable<Lib.App.Device>? Devices(Guid clientsId)
+    public IEnumerable<Lib.App.Device>? Devices(Guid clientId)
     {
-        return _devicesesService.DevicesByClient(clientsId).Result;
+        return _devicesesService.DevicesByClient(clientId).Result;
     }
 
     [HttpGet(Lib.Communication.Endpoints.CLIENT)]
