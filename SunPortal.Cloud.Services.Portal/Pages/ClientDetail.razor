@@ -19,7 +19,8 @@
             </LabelContent>
             <ChildContent>
                 <section>
-                    <MatTable Items="@_devices" ShowPaging="false" UseSortHeaderRow="true" AllowSelection="true" SelectionChanged="SelectionChangedEvent">
+                    @* SelectionChanged="SelectionChangedEvent" *@
+                    <MatTable Items="@_devices" ShowPaging="false" UseSortHeaderRow="true" AllowSelection="true">
                         <MatTableHeader>
                             <MatSortHeaderRow>
                                 <MatSortHeader SortId="name">
