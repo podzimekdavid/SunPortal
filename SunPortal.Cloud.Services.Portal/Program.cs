@@ -1,4 +1,5 @@
 using MatBlazor;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.Authorization;
@@ -27,7 +28,15 @@ builder.Services.AddAuthentication().AddGoogle(googleOptions =>
 {
     googleOptions.ClientId = builder.Configuration.GetValue<string>("Authentication:Google:ClientId");
     googleOptions.ClientSecret = builder.Configuration.GetValue<string>("Authentication:Google:ClientSecret");
-});
+}) .AddCookie(options =>
+{
+    // add an instance of the patched manager to the options:
+    options.CookieManager = new ChunkingCookieManager();
+
+    options.Cookie.HttpOnly = true;
+    options.Cookie.SameSite = SameSiteMode.None;
+    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+});;
 
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
