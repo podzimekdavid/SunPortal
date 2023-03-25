@@ -17,6 +17,7 @@ public class Communication
 #endif
 
         public const string CLIENTS = "/clients";
+        public const string CLIENT = "/client";
         public const string PARAMETERS = "/device/parameters/";
         public const string DEVICES = "/devices/";
     }

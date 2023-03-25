@@ -1,12 +1,66 @@
 @attribute [Authorize]
 @page "/client/detail/{clientId}"
+@using SunPortal.Cloud.Lib.Interfaces
+@using SunPortal.Cloud.Lib.App
+
+@inject IDevicesService DevicesService
 
 
-<h3>ClientDetail</h3>
+<h3>@(_client?.Name)</h3>
+
+<div class="mat-elevation-z5 mdc-theme--surface">
+    <MatTabGroup>
+        @if (_devices != null)
+        {
+            foreach (Device device in _devices)
+            {
+                <MatTab>
+                    <LabelContent>
+                        @device.DeviceType.Name (@device.Address)
+                    </LabelContent>
+                    <ChildContent>
+                        <section>
+                            Settings
+                        </section>
+                    </ChildContent>
+                </MatTab>
+            }
+        }
+        <MatTab>
+            <LabelContent>
+                Settings
+            </LabelContent>
+            <ChildContent>
+                <section>
+                    Settings
+                </section>
+            </ChildContent>
+        </MatTab>
+    </MatTabGroup>
+</div>
 
 @code {
-    
+
     [Parameter]
     public string? ClientId { get; set; }
-    
+
+    private IEnumerable<Device>? _devices;
+    private Client? _client;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            if (string.IsNullOrEmpty(ClientId))
+                return;
+
+            var id = Guid.Parse(ClientId);
+
+            _client = await DevicesService.Client(id);
+            _devices = await DevicesService.DevicesByClient(id);
+            
+            StateHasChanged();
+        }
+    }
+
 }

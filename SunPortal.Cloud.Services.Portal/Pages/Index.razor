@@ -10,6 +10,42 @@
 @inject UserManager<IdentityUser> UserManager
 @inject NavigationManager NavigationManager
 
+<div class="mat-elevation-z5 mdc-theme--surface">
+    <MatTabGroup>
+            <MatTab>
+                <LabelContent>
+                    Statistics
+                </LabelContent>
+                <ChildContent>
+                    <section>
+                        Statistics
+                    </section>
+                </ChildContent>
+            </MatTab>
+            <MatTab>
+                <LabelContent>
+                    Settings
+                </LabelContent>
+                <ChildContent>
+                    <section>
+                        Settings
+                    </section>
+                </ChildContent>
+            </MatTab>
+            <MatTab>
+                <LabelContent>
+                    Setup
+                </LabelContent>
+                <ChildContent>
+                    <section>
+                        Setup
+                    </section>
+                </ChildContent>
+            </MatTab>
+
+        </MatTabGroup>
+</div>
+
 @if (_clients != null)
 {
     <MatTable Items="@_clients" class="mat-elevation-z5" ShowPaging="false" UseSortHeaderRow="true" AllowSelection="true" SelectionChanged="SelectionChangedEvent">
@@ -33,9 +69,15 @@
             <td>
                 @context.Name <MatIcon Icon="open_in_new" Style="vertical-align: bottom"></MatIcon>
             </td>
-            <td>@context.DevicesCount</td>
-            <td>@context.AllowedIpAddress</td>
-            <td>@context.ClientId</td>
+            <td>
+                @context.DevicesCount
+            </td>
+            <td>
+                @context.AllowedIpAddress
+            </td>
+            <td>
+                @context.ClientId
+            </td>
         </MatTableRow>
     </MatTable>
 }

@@ -23,14 +23,20 @@ public class DevicesController : Controller
     [HttpGet(Lib.Communication.Endpoints.PARAMETERS)]
     public IEnumerable<Lib.App.DeviceParameter>? Parameters(Guid deviceId, ParameterPriority? priority = null)
     {
-        return priority.HasValue ? 
-            _devicesesService.ParametersByDevice(deviceId, priority.Value).Result : 
-            _devicesesService.ParametersByDevice(deviceId).Result;
+        return priority.HasValue
+            ? _devicesesService.ParametersByDevice(deviceId, priority.Value).Result
+            : _devicesesService.ParametersByDevice(deviceId).Result;
     }
-    
+
     [HttpGet(Lib.Communication.Endpoints.DEVICES)]
     public IEnumerable<Lib.App.Device>? Devices(Guid deviceId)
     {
         return _devicesesService.DevicesByClient(deviceId).Result;
+    }
+
+    [HttpGet(Lib.Communication.Endpoints.CLIENT)]
+    public Lib.App.Client? Client(Guid clientId)
+    {
+        return _devicesesService.Client(clientId).Result;
     }
 }

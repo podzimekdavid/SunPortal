@@ -44,4 +44,11 @@ public class DevicesCommunicationService : IDevicesService
             .GetFromJsonAsync<IEnumerable<Device>?>
                 ($"{Lib.Communication.Endpoints.DEVICES}?clientId={clientId}");
     }
+
+    public async Task<Client?> Client(Guid clientId)
+    {
+        return await _client
+            .GetFromJsonAsync<Client>
+                ($"{Lib.Communication.Endpoints.CLIENT}?clientId={clientId}");
+    }
 }
