@@ -27,14 +27,14 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.Requ
 builder.Services.AddAuthentication().AddGoogle(googleOptions =>
 {
     googleOptions.ClientId = builder.Configuration.GetValue<string>("Authentication:Google:ClientId");
-    googleOptions.ClientSecret = builder.Configuration.GetValue<string>("Authentication:Google:ClientSecret");
-}).AddCookie(options =>
-{
-    // add an instance of the patched manager to the options:
-    options.CookieManager = new ChunkingCookieManager();
-    options.Cookie.SameSite = SameSiteMode.None;
-    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-});;
+    googleOptions.ClientSecret = builder.Configuration.GetValue<string>("Authentication:Google:ClientSecret"); 
+});//.AddCookie(options =>
+// {
+//     // add an instance of the patched manager to the options:
+//     options.CookieManager = new ChunkingCookieManager();
+//     options.Cookie.SameSite = SameSiteMode.None;
+//     options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+// });;
 
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
@@ -50,7 +50,8 @@ builder.Services.AddMatBlazor();
 builder.Services.Configure<ForwardedHeadersOptions>(options =>
 {
     options.ForwardedHeaders =
-        ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+         ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto |
+                           ForwardedHeaders.XForwardedHost;
     options.RequireHeaderSymmetry = false;
     options.KnownProxies.Clear();
     options.KnownNetworks.Clear();
@@ -69,12 +70,12 @@ else
     app.UseExceptionHandler("/Error");
     app.UseForwardedHeaders();
     
-    app.Use((context, next) =>
-    {
-        context.Request.Host = new HostString(builder.Configuration.GetValue<string>("Domain:Default"));
-        context.Request.Scheme = builder.Configuration.GetValue<string>("Domain:Scheme");
-        return next();
-    });
+    // app.Use((context, next) =>
+    // {
+    //     context.Request.Host = new HostString(builder.Configuration.GetValue<string>("Domain:Default"));
+    //     context.Request.Scheme = builder.Configuration.GetValue<string>("Domain:Scheme");
+    //     return next();
+    // });
     app.UseHsts();
 }
 
