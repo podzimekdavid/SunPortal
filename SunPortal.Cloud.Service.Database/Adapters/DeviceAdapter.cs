@@ -12,6 +12,6 @@ public static class DeviceAdapter
     {
         DTOConfig = new TypeAdapterConfig()
             .ForType<ClientDevice, Device>()
-            .Map(dst => dst.DeviceType, src => src.SupportedDevice.Adapt<DeviceType>()).Config;
+            .Map(dst => dst.DeviceType, src => src.SupportedDevice.Adapt<Device>()).Config;
     }
 }
