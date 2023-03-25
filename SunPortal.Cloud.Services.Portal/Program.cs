@@ -28,12 +28,10 @@ builder.Services.AddAuthentication().AddGoogle(googleOptions =>
 {
     googleOptions.ClientId = builder.Configuration.GetValue<string>("Authentication:Google:ClientId");
     googleOptions.ClientSecret = builder.Configuration.GetValue<string>("Authentication:Google:ClientSecret");
-}) .AddCookie(options =>
+}).AddCookie(options =>
 {
     // add an instance of the patched manager to the options:
     options.CookieManager = new ChunkingCookieManager();
-
-    options.Cookie.HttpOnly = true;
     options.Cookie.SameSite = SameSiteMode.None;
     options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
 });;
@@ -53,6 +51,7 @@ builder.Services.Configure<ForwardedHeadersOptions>(options =>
 {
     options.ForwardedHeaders =
         ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+    options.RequireHeaderSymmetry = false;
     options.KnownProxies.Clear();
     options.KnownNetworks.Clear();
 });
