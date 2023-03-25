@@ -1,5 +1,6 @@
 ﻿@inherits LayoutComponentBase
 @inject NavigationManager NavigationManager
+@inject AuthenticationStateProvider AuthenticationStateProvider
 
 <PageTitle>SunPortal.Cloud.Services.Portal</PageTitle>
 <MatAppBarContainer>
@@ -24,11 +25,18 @@
 
 @code{
 
-    protected override void OnAfterRender(bool firstRender)
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
         {
-           NavigationManager.NavigateTo("/Identity/Account/Login",true);
+            
+            var state = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+
+            if (!state.User.Identity.IsAuthenticated)
+            {
+                NavigationManager.NavigateTo("/Identity/Account/Login",true);
+            }
+           
         }
     }
 
