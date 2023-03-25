@@ -1,20 +1,35 @@
 ﻿@inherits LayoutComponentBase
+@inject NavigationManager NavigationManager
 
 <PageTitle>SunPortal.Cloud.Services.Portal</PageTitle>
+<MatAppBarContainer>
+    <MatAppBar Fixed="true">
+        <MatAppBarRow>
+            <MatAppBarSection>
+                <MatIconButton Icon="menu"></MatIconButton>
+                <MatAppBarTitle>SunPortal</MatAppBarTitle>
+            </MatAppBarSection>
+            <MatAppBarSection Align="@MatAppBarSectionAlign.End">
+                <MatButton>Login</MatButton>
+            </MatAppBarSection>
+        </MatAppBarRow>
+    </MatAppBar>
 
-<div class="page">
-    <div class="sidebar">
-        <NavMenu/>
-    </div>
-
-    <main>
-        <div class="top-row px-4 auth">
-            <LoginDisplay/>
-            <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
-        </div>
-
-        <article class="content px-4">
+    <MatAppBarContent>
+        <main class="content">
             @Body
-        </article>
-    </main>
-</div>
+        </main>
+    </MatAppBarContent>
+</MatAppBarContainer>
+
+@code{
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (firstRender)
+        {
+           NavigationManager.NavigateTo("/Identity/Account/Login",true);
+        }
+    }
+
+}
