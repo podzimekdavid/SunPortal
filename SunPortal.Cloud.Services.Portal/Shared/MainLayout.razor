@@ -3,40 +3,69 @@
 @inject AuthenticationStateProvider AuthenticationStateProvider
 
 <PageTitle>SunPortal.Cloud.Services.Portal</PageTitle>
-<MatAppBarContainer>
-    <MatAppBar Fixed="true">
-        <MatAppBarRow>
-            <MatAppBarSection>
-                <MatIconButton Icon="menu"></MatIconButton>
-                <MatAppBarTitle>SunPortal</MatAppBarTitle>
-            </MatAppBarSection>
-            <MatAppBarSection Align="@MatAppBarSectionAlign.End">
-                <MatButton>Login</MatButton>
-            </MatAppBarSection>
-        </MatAppBarRow>
-    </MatAppBar>
+<MatThemeProvider Theme="@_theme">
+    <MatDrawerContainer Style="width: 100vw; height: 100vh;">
+        <MatDrawer @bind-Opened="@MenuOpen" Mode="@MatDrawerMode.Modal">
+            <div>
+                <MatNavMenu>
+                    <MatNavItem Title="Level 1 Item A" OnClick="ToggleMenu">Level 1 Item A</MatNavItem>
+                    <MatNavItem Title="Level 1 Item B" OnClick="ToggleMenu">Level 1 Item B</MatNavItem>
+                </MatNavMenu>
+            </div>
+        </MatDrawer>
+        <MatDrawerContent>
+            <MatAppBarContainer>
+                <MatAppBar Fixed="true">
+                    <MatAppBarRow>
+                        <MatAppBarSection>
+                            <MatIconButton Icon="menu" OnClick="ToggleMenu"></MatIconButton>
+                            <MatAppBarTitle>SunPortal</MatAppBarTitle>
+                        </MatAppBarSection>
+                        <MatAppBarSection Align="@MatAppBarSectionAlign.End">
 
-    <MatAppBarContent>
-        <main class="content">
-            @Body
-        </main>
-    </MatAppBarContent>
-</MatAppBarContainer>
+                        </MatAppBarSection>
+                    </MatAppBarRow>
+                </MatAppBar>
+                <MatAppBarContent>
+                    <main class="content">
+                        <div class="container">
+                            @Body
+                        </div>
+                    </main>
+                </MatAppBarContent>
+            </MatAppBarContainer>
+        </MatDrawerContent>
+    </MatDrawerContainer>
+
+
+</MatThemeProvider>
 
 @code{
+
+    MatTheme _theme = new()
+    {
+        Primary = MatThemeColors.Orange._400.Value,
+        Secondary = MatThemeColors.BlueGrey._500.Value
+    };
+
+    bool MenuOpen { get; set; }
+
+    void ToggleMenu()
+    {
+        MenuOpen = !MenuOpen;
+        StateHasChanged();
+    }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
         {
-            
             var state = await AuthenticationStateProvider.GetAuthenticationStateAsync();
 
             if (!state.User.Identity.IsAuthenticated)
             {
-                NavigationManager.NavigateTo("/Identity/Account/Login",true);
+                NavigationManager.NavigateTo("/Identity/Account/Login", true);
             }
-           
         }
     }
 

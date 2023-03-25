@@ -1,0 +1,91 @@
+﻿@page
+@model LoginModel
+
+@{
+    ViewData["Title"] = "Log in";
+    Layout = "LoginLayout";
+}
+
+<div class="page">
+
+    <div class="main welcome-page" style="background-image: url('login.jpg')">
+    </div>
+    <div class="left-login-bar">
+
+        <div class="row">
+            @if (User.Identity.IsAuthenticated)
+            {
+                <div class="col-md-12">
+                    <div style="text-align: center; margin: 15px;">
+                        <a href="/">
+                            <img src="/images/page/logo-s.png" style="width: 80px;"/>
+                        </a>
+
+                    </div>
+                    <h3>Confirm logout</h3>
+                    <p>You will need to enter your email and password to log back in.</p>
+                    <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/", new {area = ""})" method="post">
+                        <button type="submit" class="nav-link btn btn-danger">Logout</button>
+                    </form>
+                </div>
+            }
+            else
+            {
+                <div class="col-md-12">
+                    <section>
+                        <form id="account" method="post">
+                            @* <div style="text-align: center; margin: 15px;"> *@
+                            @*     <a href="/"> *@
+                            @*         <img src="/images/page/logo-s.png" style="width: 80px;"/> *@
+                            @*     </a> *@
+                            @* *@
+                            @* </div> *@
+
+                            <div asp-validation-summary="All" class="text-danger"></div>
+                            <div class="form-group">
+                                <label asp-for="Input.Email"></label>
+                                <input asp-for="Input.Email" class="form-control"/>
+                                <span asp-validation-for="Input.Email" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Input.Password"></label>
+                                <input asp-for="Input.Password" class="form-control"/>
+                                <span asp-validation-for="Input.Password" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <div class="checkbox">
+                                    <label asp-for="Input.RememberMe">
+                                        <input asp-for="Input.RememberMe"/>
+                                        Remember
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group" style="text-align: right;">
+                                <button type="submit" class="btn btn-primary">Login</button>
+                            </div>
+                        </form>
+                        <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
+                            <div>
+                                <p>
+                                    @foreach (var provider in Model.ExternalLogins!)
+                                    {
+                                        <button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
+                                    }
+                                </p>
+                            </div>
+                        </form>
+                    </section>
+                </div>
+            }
+
+
+        </div>
+
+    </div>
+
+</div>
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial"/>
+}

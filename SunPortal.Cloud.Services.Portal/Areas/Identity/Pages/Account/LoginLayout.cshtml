@@ -1,0 +1,26 @@
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SunPortal</title>
+    <base href="~/" />
+    <link rel="stylesheet" href="css/bootstrap/bootstrap.min.css" />
+    <link href="css/site.css" rel="stylesheet" />
+</head>
+<body>
+
+@RenderBody()
+
+<script src="~/Identity/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/Identity/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="~/Identity/js/site.js" asp-append-version="true"></script>
+<script src="_content/MatBlazor/dist/matBlazor.js"></script>
+<link href="_content/MatBlazor/dist/matBlazor.css" rel="stylesheet" />
+@RenderSection("Scripts", required: false)
+</body>
+</html>
