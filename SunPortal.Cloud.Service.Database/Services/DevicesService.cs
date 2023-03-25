@@ -43,7 +43,7 @@ public class DevicesService : IDevicesService
     public Task<IEnumerable<Client>?> ClientsByOwner(string ownerId)
     {
         return Task.FromResult<IEnumerable<Client>?>(_database.Clients.Where(x => x.OwnerId == ownerId)
-            .ProjectToType<Lib.App.Client>());
+            .ProjectToType<Lib.App.Client>(ClientAdapter.DTOConfig));
     }
 
     public Task<IEnumerable<Device>?> DevicesByClient(Guid clientId)

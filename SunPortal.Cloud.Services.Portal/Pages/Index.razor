@@ -8,25 +8,47 @@
 @inject IDevicesService Devices
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject UserManager<IdentityUser> UserManager
+@inject NavigationManager NavigationManager
 
-<MatTable Items="@_clients" class="mat-elevation-z5" ShowPaging="false" UseSortHeaderRow="true">
-    <MatTableHeader>
-        <MatSortHeaderRow>
-            <MatSortHeader SortId="id">Id</MatSortHeader>
-            <MatSortHeader SortId="name">Name</MatSortHeader>
-            <MatSortHeader SortId="count">Devices count</MatSortHeader>
-        </MatSortHeaderRow>
-    </MatTableHeader>
-    <MatTableRow @onclick="() => NavigateDetail(@context.ClientId)">
-        <td>@context.ClientId</td>
-        <td>@context.Name</td>
-        <td></td>
-    </MatTableRow>
-</MatTable>
+@if (_clients != null)
+{
+    <MatTable Items="@_clients" class="mat-elevation-z5" ShowPaging="false" UseSortHeaderRow="true" AllowSelection="true" SelectionChanged="SelectionChangedEvent">
+        <MatTableHeader>
+            <MatSortHeaderRow>
+                <MatSortHeader SortId="name">
+                    <span style="width:200px">Name</span>
+                </MatSortHeader>
+                <MatSortHeader SortId="count">
+                    <span style="width:200px">Devices count</span>
+                </MatSortHeader>
+                <MatSortHeader SortId="count">
+                    <span style="width:200px">Allowed IP address</span>
+                </MatSortHeader>
+                <MatSortHeader SortId="id">
+                    <span>Id</span>
+                </MatSortHeader>
+            </MatSortHeaderRow>
+        </MatTableHeader>
+        <MatTableRow>
+            <td>
+                @context.Name <MatIcon Icon="open_in_new" Style="vertical-align: bottom"></MatIcon>
+            </td>
+            <td>@context.DevicesCount</td>
+            <td>@context.AllowedIpAddress</td>
+            <td>@context.ClientId</td>
+        </MatTableRow>
+    </MatTable>
+}
+else
+{
+    <span>Loading...</span>
+}
+
+
 
 @code{
 
-    private IEnumerable<Client> _clients = new List<Client>();
+    private IEnumerable<Client>? _clients;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -43,7 +65,13 @@
 
     private void NavigateDetail(Guid id)
     {
-        throw new NotImplementedException();
+        NavigationManager.NavigateTo($"/client/detail/{id}");
+    }
+
+    private void SelectionChangedEvent(object row)
+    {
+        NavigateDetail(((Client) row).ClientId);
+        StateHasChanged();
     }
 
 }
