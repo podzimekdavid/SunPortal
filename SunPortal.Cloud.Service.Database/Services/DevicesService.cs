@@ -51,7 +51,7 @@ public class DevicesService : IDevicesService
     public Task<IEnumerable<Device>?> DevicesByClient(Guid clientId)
     {
         return Task.FromResult<IEnumerable<Device>?>(_database.Devices.Include(x => x.SupportedDevice)
-            .Where(x => x.ClientDeviceId == clientId).ProjectToType<Lib.App.Device>(DeviceAdapter.DTOConfig));
+            .Where(x => x.ClientId == clientId).ProjectToType<Lib.App.Device>(DeviceAdapter.DTOConfig));
     }
 
     public Task<Client?> Client(Guid clientId)
