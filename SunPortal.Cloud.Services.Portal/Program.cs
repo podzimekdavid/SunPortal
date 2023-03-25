@@ -60,6 +60,13 @@ else
 {
     app.UseExceptionHandler("/Error");
     app.UseForwardedHeaders();
+    
+    app.Use((context, next) =>
+    {
+        context.Request.Host = new HostString(builder.Configuration.GetValue<string>("Domain:Default"));
+        context.Request.Scheme = builder.Configuration.GetValue<string>("Domain:Scheme");
+        return next();
+    });
     app.UseHsts();
 }
 
