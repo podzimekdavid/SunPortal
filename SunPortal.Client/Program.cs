@@ -15,13 +15,17 @@ public static class Program
             };
 
             client.Start();
+            
+            while (true)
+            {
+                client.CheckQueue();
+            }
         }
         catch (Exception e)
         {
             Console.WriteLine(e);
         }
 
-        // TODO: loop?
-        Console.ReadKey();
+
     }
 }

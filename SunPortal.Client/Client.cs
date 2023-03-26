@@ -13,7 +13,7 @@ public class Client : IDisposable
     private readonly Studer _studer;
     private bool _debug;
 
-    public Client(string comPort,bool debug = false )
+    public Client(string comPort, bool debug = false)
     {
         _debug = debug;
         _studer = new Studer(comPort);
@@ -24,6 +24,7 @@ public class Client : IDisposable
 
     public async void Start()
     {
+        _requests = new();
         _hub = new HubConnectionBuilder().WithUrl($"{Url}{Connection.HUB_PATH}")
             .WithAutomaticReconnect(new[] {TimeSpan.Zero, TimeSpan.Zero, TimeSpan.FromSeconds(10)})
             .Build();
@@ -35,7 +36,39 @@ public class Client : IDisposable
 
         Console.WriteLine(_hub.State);
         Register();
-        
+    }
+
+    //public void CheckConnection()
+    // {
+    //     if (_hub.State != HubConnectionState.Connected)
+    //     {
+    //         Start();
+    //
+    //         Thread.Sleep(1000);
+    //     }
+    // }
+
+    public void CheckQueue()
+    {
+        if (_requests.TryDequeue(out ValueRequest? request))
+        {
+            if (request == null)
+                return;
+
+            var data = ReadValue((ushort) request.ParameterId, request.Address);
+
+            _hub.InvokeAsync(Connection.ServerMethods.VALUE_RESPONSE, new ValueResponse()
+            {
+                RequestId = request.RequestId,
+                ClientId = ClientId,
+                Data = data
+            }).GetAwaiter().GetResult();
+
+            if (_debug)
+            {
+                Console.WriteLine($"Send response {request.ParameterId}");
+            }
+        }
     }
 
     private void ChangeParameterRequested(ChangeParameterRequest request)
@@ -47,7 +80,6 @@ public class Client : IDisposable
             Console.WriteLine(request.Address);
             //Console.WriteLine(BitConverter.ToBoolean(request.Value, 0));
             Console.ResetColor();
-
         }
 
         SetParameter((ushort) request.ParameterId, request.Address, request.Value);
@@ -58,7 +90,9 @@ public class Client : IDisposable
         await _hub.InvokeAsync(Connection.ServerMethods.REGISTER, ClientId);
     }
 
-    private async void ValueRequested(ValueRequest request)
+    private Queue<ValueRequest> _requests;
+
+    private void ValueRequested(ValueRequest request)
     {
         if (_debug)
         {
@@ -67,12 +101,7 @@ public class Client : IDisposable
             Console.ResetColor();
         }
 
-        await _hub.InvokeAsync(Connection.ServerMethods.VALUE_RESPONSE, new ValueResponse()
-        {
-            RequestId = request.RequestId,
-            ClientId = ClientId,
-            Data = ReadValue((ushort) request.ParameterId, request.Address)
-        });
+        _requests.Enqueue(request);
     }
 
     private byte[]? ReadValue(ushort parameterId, int address)
@@ -84,11 +113,8 @@ public class Client : IDisposable
                 OperationType.Read,
                 new UserInfo(parameterId, UserInfo.Property.Value));
 
-            //Console.WriteLine(address);
             var data = _studer.SendAndReceiveFrame(frame);
 
-
-            //Console.WriteLine(BitConverter.ToSingle(data.Object.Data, 0));
             return data.Object.Data;
         }
     }
