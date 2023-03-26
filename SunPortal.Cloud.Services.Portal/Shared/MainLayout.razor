@@ -6,10 +6,10 @@
 <MatThemeProvider Theme="@_theme">
     <MatDrawerContainer Style="width: 100vw; height: 100vh;">
         <MatDrawer @bind-Opened="@MenuOpen" Mode="@MatDrawerMode.Modal">
-            <div>
+            <div style="margin: 60px">
                 <MatNavMenu>
-                    <MatNavItem Title="Level 1 Item A" OnClick="ToggleMenu">Level 1 Item A</MatNavItem>
-                    <MatNavItem Title="Level 1 Item B" OnClick="ToggleMenu">Level 1 Item B</MatNavItem>
+                    <MatNavItem Href="/" Title="Dashboard" OnClick="ToggleMenu">Dashboard</MatNavItem>
+                    <MatNavItem Href="/SupportedDevices" Title="Catalog" OnClick="ToggleMenu">Catalog</MatNavItem>
                 </MatNavMenu>
             </div>
         </MatDrawer>

@@ -43,14 +43,14 @@ public class DevicesCommunicationService : IDevicesService
     {
         return await _client
             .GetFromJsonAsync<IEnumerable<Device>?>
-                ($"{Lib.Communication.Endpoints.DEVICES}?{DEVICE_ID_ATRIBUTE}{clientId}");
+                ($"{Lib.Communication.Endpoints.DEVICES}?{CLIENT_ID_ATRIBUTE}{clientId}");
     }
 
     public async Task<Client?> Client(Guid clientId)
     {
         return await _client
             .GetFromJsonAsync<Client>
-                ($"{Lib.Communication.Endpoints.CLIENT}?{DEVICE_ID_ATRIBUTE}{clientId}");
+                ($"{Lib.Communication.Endpoints.CLIENT}?{CLIENT_ID_ATRIBUTE}{clientId}");
     }
 
     public async Task<Device?> Device(Guid deviceId)
