@@ -1,0 +1,80 @@
+@attribute [Authorize]
+@page "/client/device/detail/{deviceId}"
+@using SunPortal.Cloud.Lib.App
+@using SunPortal.Cloud.Lib.Interfaces
+@using SunPortal.Communication.Parameters
+
+@inject IDevicesService DevicesService
+
+<h3>@DeviceId</h3>
+
+@if (_parameters != null)
+{
+    <MatAccordion>
+        <MatExpansionPanel>
+            <MatExpansionPanelSummary>
+                <MatExpansionPanelHeader>Advance parameters</MatExpansionPanelHeader>
+            </MatExpansionPanelSummary>
+            <MatExpansionPanelDetails>
+                <p>params</p>
+            </MatExpansionPanelDetails>
+        </MatExpansionPanel>
+
+        <MatExpansionPanel>
+            <MatExpansionPanelSummary>
+                <MatExpansionPanelHeader>Other parameters</MatExpansionPanelHeader>
+            </MatExpansionPanelSummary>
+            <MatExpansionPanelDetails Style="padding: 3px !important;">
+                <MatTable Items="@_parameters" ShowPaging="true" UseSortHeaderRow="true" AllowSelection="true">
+                    <MatTableHeader>
+                        <MatSortHeaderRow>
+                            <MatSortHeader SortId="name">
+                                <span style="width:100px">Name</span>
+                            </MatSortHeader>
+                            <MatSortHeader SortId="count">
+                                <span style="width:100px">Unit</span>
+                            </MatSortHeader>
+                            <MatSortHeader SortId="count">
+                                <span>Description</span>
+                            </MatSortHeader>
+                        </MatSortHeaderRow>
+                    </MatTableHeader>
+                    <MatTableRow>
+                        <td>
+                            @context.ParameterId
+                        </td>
+                        <td>
+                            @context.Unit
+                        </td>
+                        <td>
+                          @context.Description
+                        </td>
+                    </MatTableRow>
+                </MatTable>
+            </MatExpansionPanelDetails>
+        </MatExpansionPanel>
+    </MatAccordion>
+}
+
+
+@code {
+
+    [Parameter]
+    public string? DeviceId { get; set; }
+
+    private IEnumerable<DeviceParameter>? _parameters;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            var id = Guid.Parse(DeviceId);
+
+            _parameters = await DevicesService.ParametersByDevice(id);
+
+            StateHasChanged();
+        }
+    }
+
+
+}

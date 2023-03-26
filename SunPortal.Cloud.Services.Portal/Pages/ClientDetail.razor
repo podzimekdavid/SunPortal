@@ -4,19 +4,19 @@
 @using SunPortal.Cloud.Lib.App
 
 @inject IDevicesService DevicesService
+@inject NavigationManager NavigationManager
 
 @if (_client != null)
 {
     <h3>@(_client?.Name)</h3>
 }
 
-@* SelectionChanged="SelectionChangedEvent" *@
 
 <div class="mat-elevation-z5 mdc-theme--surface">
-    
+
 </div>
 
-<MatTable Items="@_devices" class="mat-elevation-z5" ShowPaging="false" UseSortHeaderRow="true" AllowSelection="true">
+<MatTable Items="@_devices" class="mat-elevation-z5" ShowPaging="false" UseSortHeaderRow="true" AllowSelection="true" SelectionChanged="SelectionChangedEvent">
     <MatTableHeader>
         <MatSortHeaderRow>
             <MatSortHeader SortId="name">
@@ -41,7 +41,7 @@
             @context.Address
         </td>
         <td>
-            @context.DeviceType.ManufactureWebsiteUrl
+            <a href="@context.DeviceType.ManufactureWebsiteUrl">@context.DeviceType.ManufactureWebsiteUrl</a>
         </td>
         <td>
             @context.ClientDeviceId
@@ -97,6 +97,17 @@
 
             StateHasChanged();
         }
+    }
+
+    private void NavigateDetail(Guid id)
+    {
+        NavigationManager.NavigateTo($"/client/device/detail/{id}");
+    }
+
+    private void SelectionChangedEvent(object row)
+    {
+        NavigateDetail(((Device) row).ClientDeviceId);
+        StateHasChanged();
     }
 
 }
