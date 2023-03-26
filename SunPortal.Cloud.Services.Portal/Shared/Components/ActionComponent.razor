@@ -1,0 +1,36 @@
+@using SunPortal.Cloud.Lib.App
+@using SunPortal.Cloud.Services.Portal.Services
+
+@inject ClientCommunicationService Service
+
+<MatButton OnClick="CallAction">@Parameter.Description</MatButton>
+        <MatSnackbar @bind-IsOpen="@_snackIsOpen" Leading="true">
+            <MatSnackbarContent>@Parameter.Description - executed.</MatSnackbarContent>
+        </MatSnackbar>
+ 
+
+
+@code {
+    bool _snackIsOpen = false;
+    
+    [Parameter]
+    public DeviceParameter Parameter { get; set; }
+
+    [Parameter]
+    public Device Device { get; set; }
+    
+    void CallAction()
+    {
+        Service.SendChangeParameterRequest(new ()
+        {
+            Address = Device.Address,
+            ClientId = Device.ClientId,
+            Parameter = Parameter.ParameterId,
+            Value = BitConverter.GetBytes(0)
+        });
+        
+        _snackIsOpen = true;
+        StateHasChanged();
+    }
+    
+}

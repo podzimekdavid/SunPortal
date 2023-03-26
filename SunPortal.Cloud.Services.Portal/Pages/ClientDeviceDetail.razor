@@ -28,14 +28,60 @@ else
             </div>
         }
     </div>
+    <h4>Actions</h4>
+    <div class="row">
+        @foreach (var parameter in _parameters.Where(x => x.Priority == ParameterPriority.Special && x.Mode==ParameterMode.Write))
+        {
+            <div class="col-2">
+                <ActionComponent Device="_device" Parameter="parameter"></ActionComponent>
+            </div>
+        }
+    </div>
 
     <MatAccordion>
         <MatExpansionPanel>
             <MatExpansionPanelSummary>
                 <MatExpansionPanelHeader>Advance parameters</MatExpansionPanelHeader>
             </MatExpansionPanelSummary>
-            <MatExpansionPanelDetails>
-                <p>params</p>
+            <MatExpansionPanelDetails Style="padding: 3px !important;">
+                <MatTable Items="@_parameters.Where(x => x.Priority == ParameterPriority.Medium || x.Priority == ParameterPriority.Special)" ShowPaging="true" UseSortHeaderRow="true" AllowSelection="true">
+                    <MatTableHeader>
+                        <MatSortHeaderRow>
+                            <MatSortHeader SortId="name">
+                                <span style="width:100px">Name</span>
+                            </MatSortHeader>
+                            <MatSortHeader SortId="unit">
+                                <span style="width:100px">Unit</span>
+                            </MatSortHeader>
+                            <MatSortHeader SortId="mode">
+                                <span style="width:100px">Mode</span>
+                            </MatSortHeader>
+                            <MatSortHeader SortId="description">
+                                <span style="width:200px">Description</span>
+                            </MatSortHeader>
+                            <MatSortHeader SortId="value">
+                                <span>Current value</span>
+                            </MatSortHeader>
+                        </MatSortHeaderRow>
+                    </MatTableHeader>
+                    <MatTableRow>
+                        <td>
+                            @context.ParameterId
+                        </td>
+                        <td>
+                            @context.Unit
+                        </td>
+                        <td>
+                            @context.Mode
+                        </td>
+                        <td>
+                            @context.Description
+                        </td>
+                        <td>
+                            <LiveValueComponent Device="_device" Parameter="context"></LiveValueComponent>
+                        </td>
+                    </MatTableRow>
+                </MatTable>
             </MatExpansionPanelDetails>
         </MatExpansionPanel>
 
@@ -53,6 +99,9 @@ else
                             <MatSortHeader SortId="unit">
                                 <span style="width:100px">Unit</span>
                             </MatSortHeader>
+                            <MatSortHeader SortId="mode">
+                                <span style="width:100px">Mode</span>
+                            </MatSortHeader>
                             <MatSortHeader SortId="description">
                                 <span style="width:200px">Description</span>
                             </MatSortHeader>
@@ -67,6 +116,9 @@ else
                         </td>
                         <td>
                             @context.Unit
+                        </td>
+                        <td>
+                            @context.Mode
                         </td>
                         <td>
                             @context.Description

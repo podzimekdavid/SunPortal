@@ -25,7 +25,10 @@ else
 {
     if (!RequestValueOnInit)
     {
-        <MatIcon Icon="cloud_download" @onclick="Request"></MatIcon>
+        @if (Parameter.Mode == ParameterMode.Read || Parameter.Mode == ParameterMode.ReadWrite)
+        {
+            <MatIcon Icon="cloud_download" @onclick="Request"></MatIcon>
+        }
     }
 }
 

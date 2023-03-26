@@ -110,7 +110,7 @@ public class ClientCommunicationService:IDisposable
             body: request.ToMessage());
     }
     
-    public void SendChangeParameterRequest(CommunicationChangeParameterRequest request, Guid deviceId)
+    public void SendChangeParameterRequest(CommunicationChangeParameterRequest request)
     {
         //_log.LogError(request.RequestId.ToString());
         _changeParameterRequestChannel.BasicPublish(exchange: "",
