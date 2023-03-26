@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
-using SunPortal.Communication.Parameters;
+using SunPortal.Cloud.Lib.Parameters;
 
 namespace SunPortal.Cloud.Service.Database.Data;
 

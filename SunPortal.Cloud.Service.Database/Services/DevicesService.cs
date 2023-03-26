@@ -1,9 +1,9 @@
 ﻿using SunPortal.Cloud.Service.Database.Data;
-using SunPortal.Communication.Parameters;
 using Mapster;
 using Microsoft.EntityFrameworkCore;
 using SunPortal.Cloud.Lib.App;
 using SunPortal.Cloud.Lib.Interfaces;
+using SunPortal.Cloud.Lib.Parameters;
 using SunPortal.Cloud.Service.Database.Adapters;
 using Client = SunPortal.Cloud.Lib.App.Client;
 

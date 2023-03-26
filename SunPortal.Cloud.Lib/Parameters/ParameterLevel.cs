@@ -1,4 +1,4 @@
-﻿namespace SunPortal.Communication.Parameters;
+﻿namespace SunPortal.Cloud.Lib.Parameters;
 
 public enum ParameterLevel
 {

@@ -1,7 +1,7 @@
 using System.Collections;
 using SunPortal.Cloud.Lib.App;
 using SunPortal.Cloud.Lib.Interfaces;
-using SunPortal.Communication.Parameters;
+using SunPortal.Cloud.Lib.Parameters;
 
 namespace SunPortal.Cloud.Services.Portal.Services;
 

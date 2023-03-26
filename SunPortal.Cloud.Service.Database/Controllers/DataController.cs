@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SunPortal.Cloud.Service.Database.Services;
-using SunPortal.Communication.Parameters;
 
 namespace SunPortal.Cloud.Service.Database.Controllers;
 

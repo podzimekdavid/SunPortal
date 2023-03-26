@@ -1,7 +1,7 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using SunPortal.Cloud.Lib.Models;
-using SunPortal.Communication.Parameters;
+using SunPortal.Cloud.Lib.Parameters;
 
 namespace SunPortal.Cloud.Lib.Extensions;
 
