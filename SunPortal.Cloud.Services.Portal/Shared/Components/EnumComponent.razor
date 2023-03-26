@@ -1,0 +1,46 @@
+@using System.Text.RegularExpressions
+
+@_text
+
+@code {
+    Regex _r = new Regex(@"(\d\d?)[:]([\w|.]*)");
+
+    [Parameter]
+    public string Options { get; set; }
+
+    [Parameter]
+    public string EnumValue { get; set; }
+
+    private string _text = String.Empty;
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (firstRender)
+        {
+            try
+            {
+                var result = _r.Matches(Options);
+
+                foreach (Match match in result)
+                {
+                    if (match.Groups.Count > 2)
+                    {
+                        if (match.Groups[1].Value == EnumValue)
+                        {
+                            _text = match.Groups[2].Value;
+                            
+                            StateHasChanged();
+                            
+                            return;
+                        }
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                // ignored
+            }
+        }
+    }
+
+}

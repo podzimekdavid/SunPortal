@@ -10,10 +10,15 @@
 
 @if (!string.IsNullOrEmpty(_textValue))
 {
-    @_textValue
+
     @if (Parameter.Type != ParameterType.ShortEnum)
     {
+        @_textValue
         @Parameter.Unit
+    }
+    else
+    {
+        <EnumComponent Options="@Parameter.Unit" EnumValue="@_textValue"></EnumComponent>
     }
 }
 else

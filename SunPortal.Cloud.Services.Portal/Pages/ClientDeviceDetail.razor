@@ -2,6 +2,7 @@
 @page "/client/device/detail/{deviceId}"
 @using SunPortal.Cloud.Lib.App
 @using SunPortal.Cloud.Lib.Interfaces
+@using SunPortal.Cloud.Lib.Parameters
 
 @inject IDevicesService DevicesService
 
@@ -19,6 +20,18 @@ else
 
 @if (_parameters != null)
 {
+    <div class="row">
+        @foreach (var parameter in _parameters.Where(x => x.Priority == ParameterPriority.High))
+        {
+            <div class="col-3">
+                <div class="mat-elevation-z5">
+                    <h5>@parameter.Description</h5>
+                    <LiveValueComponent Device="_device" Parameter="parameter" RequestValueOnInit="true"></LiveValueComponent>
+                </div>
+            </div>
+        }
+    </div>
+    
     <MatAccordion>
         <MatExpansionPanel>
             <MatExpansionPanelSummary>
@@ -34,19 +47,19 @@ else
                 <MatExpansionPanelHeader>Other parameters</MatExpansionPanelHeader>
             </MatExpansionPanelSummary>
             <MatExpansionPanelDetails Style="padding: 3px !important;">
-                <MatTable Items="@_parameters" ShowPaging="true" UseSortHeaderRow="true" AllowSelection="true">
+                <MatTable Items="@_parameters.Where(x => x.Priority == ParameterPriority.Low)" ShowPaging="true" UseSortHeaderRow="true" AllowSelection="true">
                     <MatTableHeader>
                         <MatSortHeaderRow>
                             <MatSortHeader SortId="name">
                                 <span style="width:100px">Name</span>
                             </MatSortHeader>
-                            <MatSortHeader SortId="count">
+                            <MatSortHeader SortId="unit">
                                 <span style="width:100px">Unit</span>
                             </MatSortHeader>
-                            <MatSortHeader SortId="count">
-                                <span>Description</span>
+                            <MatSortHeader SortId="description">
+                                <span style="width:200px">Description</span>
                             </MatSortHeader>
-                            <MatSortHeader SortId="count">
+                            <MatSortHeader SortId="value">
                                 <span>Current value</span>
                             </MatSortHeader>
                         </MatSortHeaderRow>
