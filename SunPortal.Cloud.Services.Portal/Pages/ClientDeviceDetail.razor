@@ -24,14 +24,11 @@ else
         @foreach (var parameter in _parameters.Where(x => x.Priority == ParameterPriority.High))
         {
             <div class="col-3">
-                <div class="mat-elevation-z5">
-                    <h5>@parameter.Description</h5>
-                    <LiveValueComponent Device="_device" Parameter="parameter" RequestValueOnInit="true"></LiveValueComponent>
-                </div>
+                <LiveValueMainComponent Device="_device" Parameter="parameter"></LiveValueMainComponent>
             </div>
         }
     </div>
-    
+
     <MatAccordion>
         <MatExpansionPanel>
             <MatExpansionPanelSummary>

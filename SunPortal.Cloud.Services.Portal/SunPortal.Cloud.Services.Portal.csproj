@@ -29,6 +29,9 @@
       <Content Update="Pages\Index.razor.css">
         <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       </Content>
+      <Content Update="Shared\Components\LiveValueMainComponent.razor.css">
+        <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      </Content>
     </ItemGroup>
 
     <ItemGroup>

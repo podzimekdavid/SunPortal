@@ -1,0 +1,17 @@
+@using SunPortal.Cloud.Lib.App
+
+<div class="mat-elevation-z5 box">
+    <span>@Parameter.Description</span>
+   <h5> <LiveValueComponent Device="Device" Parameter="Parameter" RequestValueOnInit="true"></LiveValueComponent></h5>
+</div>
+
+
+@code {
+
+    [Parameter]
+    public DeviceParameter Parameter { get; set; }
+
+    [Parameter]
+    public Device Device { get; set; }
+
+}
