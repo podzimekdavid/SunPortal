@@ -27,7 +27,7 @@
         Client.OnResponseReceived += OnResponseReceived;
     }
 
-    private async void OnResponseReceived(CommunicationValueResponse response, Guid deviceId)
+    private async void OnResponseReceived(CommunicationValueResponse response)
     {
         _responses.Add(response);
 
@@ -41,7 +41,7 @@
             Address = 1,
             ClientId =_testClient,
             Parameter = _parameter,
-        }, _tempId);
+        });
     }
 
     private void On()

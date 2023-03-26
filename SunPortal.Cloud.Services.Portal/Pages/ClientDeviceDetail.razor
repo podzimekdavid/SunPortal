@@ -46,6 +46,9 @@ else
                             <MatSortHeader SortId="count">
                                 <span>Description</span>
                             </MatSortHeader>
+                            <MatSortHeader SortId="count">
+                                <span>Current value</span>
+                            </MatSortHeader>
                         </MatSortHeaderRow>
                     </MatTableHeader>
                     <MatTableRow>
@@ -56,7 +59,10 @@ else
                             @context.Unit
                         </td>
                         <td>
-                          @context.Description
+                            @context.Description
+                        </td>
+                        <td>
+                            <LiveValueComponent Device="_device" Parameter="context"></LiveValueComponent>
                         </td>
                     </MatTableRow>
                 </MatTable>
@@ -82,7 +88,7 @@ else
 
             _parameters = await DevicesService.ParametersByDevice(id);
             _device = await DevicesService.Device(id);
-            
+
             StateHasChanged();
         }
     }

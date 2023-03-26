@@ -1,0 +1,88 @@
+@using SunPortal.Cloud.Lib.App
+@using SunPortal.Cloud.Lib.Extensions
+@using SunPortal.Cloud.Lib.Models
+@using SunPortal.Cloud.Lib.Parameters
+@using SunPortal.Cloud.Services.Portal.Services
+
+@implements IDisposable
+
+@inject LiveValuesService Service
+
+@if (!string.IsNullOrEmpty(_textValue))
+{
+    @_textValue
+    @if (Parameter.Type != ParameterType.ShortEnum)
+    {
+        @Parameter.Unit
+    }
+}
+else
+{
+    if (!RequestValueOnInit)
+    {
+        <MatIcon Icon="cloud_download" @onclick="Request"></MatIcon>
+    }
+}
+
+@code {
+
+    [Parameter]
+    public DeviceParameter Parameter { get; set; }
+
+    [Parameter]
+    public Device Device { get; set; }
+
+    [Parameter]
+    public bool RequestValueOnInit { get; set; } = false;
+
+    private string _textValue = string.Empty;
+
+    protected override void OnInitialized()
+    {
+        Service.OnResponseReceived += ServiceOnResponseReceived;
+    }
+
+    protected override Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            if (RequestValueOnInit)
+            {
+                Request();
+            }
+        }
+
+        return base.OnAfterRenderAsync(firstRender);
+    }
+
+    private async void ServiceOnResponseReceived(ParameterContext context, CommunicationValueResponse response)
+    {
+        if (Parameter.ParameterId == context.Parameter && Device.ClientDeviceId == context.DeviceId)
+        {
+            _textValue = response.Data.ToValueText(Parameter.Type);
+
+            await InvokeAsync(StateHasChanged);
+        }
+    }
+
+    private void Request()
+    {
+        Service.SendRequest(new()
+        {
+            Address = Device.Address,
+            ClientId = Device.ClientId,
+            Parameter = Parameter.ParameterId
+        },
+            new()
+            {
+                DeviceId = Device.ClientDeviceId,
+                Parameter = Parameter.ParameterId
+            });
+    }
+
+    public void Dispose()
+    {
+        Service.OnResponseReceived -= ServiceOnResponseReceived;
+    }
+
+}

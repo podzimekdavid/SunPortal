@@ -14,14 +14,14 @@ public class ClientCommunicationService:IDisposable
     /// <summary>
     ///  RequestId,DeviceId
     /// </summary>
-    private readonly Dictionary<Guid, Guid> _requests;
+   // private readonly Dictionary<Guid, Guid> _requests;
     private IModel? _valueRequestChannel;
     private IModel? _valueResponseChannel;
     private IModel? _changeParameterRequestChannel;
 
     private readonly ILogger<ClientCommunicationService> _log;
 
-    public delegate void MQResponseReceived(CommunicationValueResponse response, Guid deviceId);
+    public delegate void MQResponseReceived(CommunicationValueResponse response);
 
     public MQResponseReceived? OnResponseReceived;
 
@@ -30,7 +30,7 @@ public class ClientCommunicationService:IDisposable
         ILogger<ClientCommunicationService> log)
     {
         _configuration = configuration;
-        _requests = new();
+        //_requests = new();
         _log = log;
 
         _connection = ConnectionFactory().CreateConnection();
@@ -87,22 +87,22 @@ public class ClientCommunicationService:IDisposable
         if (response == null)
             return;
 
-        if (_requests.ContainsKey(response.RequestId))
-        {
-            OnResponseReceived?.Invoke(response, _requests[response.RequestId]);
+        // if (_requests.ContainsKey(response.RequestId))
+        // {
+            OnResponseReceived?.Invoke(response);
 
-            _requests.Remove(response.RequestId);
-        }
-        else
-        {
-            _log.LogWarning($"Lost response found - {response.RequestId}");
-        }
+        //     _requests.Remove(response.RequestId);
+        // }
+        // else
+        // {
+        //     _log.LogWarning($"Lost response found - {response.RequestId}");
+        // }
         
     }
 
-    public void SendRequest(CommunicationValueRequest request, Guid deviceId)
+    public void SendRequest(CommunicationValueRequest request)
     {
-        _requests.Add(request.RequestId, deviceId);
+        //_requests.Add(request.RequestId, deviceId);
 
         _valueRequestChannel.BasicPublish(exchange: "",
             routingKey: Lib.Communication.RMQ_REQUEST_CHANNEL,
