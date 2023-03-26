@@ -3,9 +3,9 @@
 
 @inject ClientCommunicationService Service
 
-<MatButton OnClick="CallAction">@Parameter.Description</MatButton>
+<MatButton Raised="true" OnClick="CallAction">@Parameter.Description</MatButton>
         <MatSnackbar @bind-IsOpen="@_snackIsOpen" Leading="true">
-            <MatSnackbarContent>@Parameter.Description - executed.</MatSnackbarContent>
+            <MatSnackbarContent>@Parameter.Description executed, @Device.DeviceType.Name.</MatSnackbarContent>
         </MatSnackbar>
  
 

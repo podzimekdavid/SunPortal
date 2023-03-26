@@ -28,6 +28,7 @@ else
             </div>
         }
     </div>
+    <MatDivider Inset="true"></MatDivider>
     <h4>Actions</h4>
     <div class="row">
         @foreach (var parameter in _parameters.Where(x => x.Priority == ParameterPriority.Special && x.Mode==ParameterMode.Write))
@@ -37,7 +38,8 @@ else
             </div>
         }
     </div>
-
+    <MatDivider Inset="true"></MatDivider>
+    <h4>Parameters</h4>
     <MatAccordion>
         <MatExpansionPanel>
             <MatExpansionPanelSummary>
