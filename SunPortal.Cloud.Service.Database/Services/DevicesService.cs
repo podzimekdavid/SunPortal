@@ -59,4 +59,10 @@ public class DevicesService : IDevicesService
         return Task.FromResult(_database.Clients.Include(x => x.Devices)
             .First(x => x.ClientId == clientId).Adapt<Lib.App.Client?>(ClientAdapter.DTOConfig));
     }
+
+    public Task<Device?> Device(Guid deviceId)
+    {
+        return Task.FromResult<Device?>(_database.Devices.Include(x => x.SupportedDevice)
+            .First(x => x.ClientDeviceId == deviceId).Adapt<Lib.App.Device>(DeviceAdapter.DTOConfig));
+    }
 }

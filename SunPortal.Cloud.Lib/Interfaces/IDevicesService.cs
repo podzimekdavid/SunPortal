@@ -13,4 +13,6 @@ public interface IDevicesService
     public Task<IEnumerable<Lib.App.Device>?> DevicesByClient(Guid clientId);
 
     public Task<Lib.App.Client?> Client(Guid clientId);
+
+    public Task<Lib.App.Device?> Device(Guid deviceId);
 }

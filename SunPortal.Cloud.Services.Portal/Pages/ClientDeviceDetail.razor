@@ -6,7 +6,17 @@
 
 @inject IDevicesService DevicesService
 
-<h3>@DeviceId</h3>
+@if (_device != null)
+{
+    <h3>@_device.DeviceType.Name (@_device.Address)</h3>
+    <p>@_device.DeviceType.Description</p>
+}
+else
+{
+    <h3>@DeviceId</h3>
+}
+
+
 
 @if (_parameters != null)
 {
@@ -63,6 +73,7 @@
     public string? DeviceId { get; set; }
 
     private IEnumerable<DeviceParameter>? _parameters;
+    private Device? _device;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -71,7 +82,8 @@
             var id = Guid.Parse(DeviceId);
 
             _parameters = await DevicesService.ParametersByDevice(id);
-
+            _device = await DevicesService.Device(id);
+            
             StateHasChanged();
         }
     }

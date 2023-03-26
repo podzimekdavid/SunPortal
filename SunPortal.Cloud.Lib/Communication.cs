@@ -20,5 +20,6 @@ public class Communication
         public const string CLIENT = "/client";
         public const string PARAMETERS = "/device/parameters/";
         public const string DEVICES = "/devices/";
+        public const string DEVICE = "/device";
     }
 }

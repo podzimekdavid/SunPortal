@@ -16,6 +16,7 @@ public class DevicesCommunicationService : IDevicesService
     }
 
     private const string DEVICE_ID_ATRIBUTE = "deviceId=";
+    private const string CLIENT_ID_ATRIBUTE = "clientId=";
 
     public async Task<IEnumerable<DeviceParameter>?> ParametersByDevice(Guid deviceId, ParameterPriority priority)
     {
@@ -42,13 +43,20 @@ public class DevicesCommunicationService : IDevicesService
     {
         return await _client
             .GetFromJsonAsync<IEnumerable<Device>?>
-                ($"{Lib.Communication.Endpoints.DEVICES}?clientId={clientId}");
+                ($"{Lib.Communication.Endpoints.DEVICES}?{DEVICE_ID_ATRIBUTE}{clientId}");
     }
 
     public async Task<Client?> Client(Guid clientId)
     {
         return await _client
             .GetFromJsonAsync<Client>
-                ($"{Lib.Communication.Endpoints.CLIENT}?clientId={clientId}");
+                ($"{Lib.Communication.Endpoints.CLIENT}?{DEVICE_ID_ATRIBUTE}{clientId}");
+    }
+
+    public async Task<Device?> Device(Guid deviceId)
+    {
+        return await _client
+            .GetFromJsonAsync<Device>
+                ($"{Lib.Communication.Endpoints.DEVICE}?{DEVICE_ID_ATRIBUTE}{deviceId}");
     }
 }

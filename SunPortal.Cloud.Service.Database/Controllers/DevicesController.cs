@@ -39,4 +39,10 @@ public class DevicesController : Controller
     {
         return _devicesesService.Client(clientId).Result;
     }
+    
+    [HttpGet(Lib.Communication.Endpoints.DEVICE)]
+    public Lib.App.Device? Device(Guid deviceId)
+    {
+        return _devicesesService.Device(deviceId).Result;
+    }
 }
