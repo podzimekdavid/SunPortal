@@ -11,23 +11,24 @@
     if (Chart.SecondaryYParameter != null && _secondaryYParameterValues != null)
     {
         <ApexChart TItem="ChartTimeValue"
-                   Title="@Chart.Name">
+                   Title="@Chart.Name"
+                   XAxisType="XAxisType.Datetime">
 
             <ApexPointSeries TItem="ChartTimeValue"
                              Items="_primaryYParameterValues"
                              SeriesType="SeriesType.Area"
                              Name="@Chart.PrimaryYParameter.Description"
-                             XValue="@(e => e.DateTime)"
+                             XValue="@(e => e.DateTime.ToUnixTimeMilliseconds())"
                              YValue="@(e => (decimal) e.Value)"
-                             OrderByDescending="@(e => e.X)" ShowDataLabels/>
+                             OrderByDescending="@(e => e.X)" />
 
             <ApexPointSeries TItem="ChartTimeValue"
                              Items="_secondaryYParameterValues"
                              SeriesType="SeriesType.Area"
                              Name="@Chart.SecondaryYParameter.Description"
-                             XValue="@(e => e.DateTime)"
+                             XValue="@(e => e.DateTime.ToUnixTimeMilliseconds())"
                              YValue="@(e => (decimal) e.Value)"
-                             OrderByDescending="@(e => e.X)" ShowDataLabels/>
+                             OrderByDescending="@(e => e.X)" />
         </ApexChart>
     }
     else
@@ -35,15 +36,16 @@
         if (_primaryYParameterValues != null)
         {
             <ApexChart TItem="ChartTimeValue"
-                       Title="@Chart.Name">
+                       Title="@Chart.Name"
+                       XAxisType="XAxisType.Datetime">
 
                 <ApexPointSeries TItem="ChartTimeValue"
                                  Items="_primaryYParameterValues"
                                  SeriesType="SeriesType.Area"
-                                 Name="Gross Value"
-                                 XValue="@(e => e.DateTime)"
+                                 Name="@Chart.PrimaryYParameter.Description"
+                                 XValue="@(e => e.DateTime.ToUnixTimeMilliseconds())"
                                  YValue="@(e => (decimal) e.Value)"
-                                 OrderByDescending="@(e => e.X)" ShowDataLabels/>
+                                 OrderByDescending="@(e => e.X)" />
 
 
             </ApexChart>

@@ -19,7 +19,7 @@ public class DataService
         return await _client.GetFromJsonAsync<IEnumerable<ChartTimeValue>?>
         ($"{Communication.Endpoints.LOG_FLOAT_VALUES}?deviceId={deviceId}" +
          $"&parameterId={parameterId}" +
-         $"&start={start.ToString("yyyy-MM-ddTHH:mm:sszzz")}" +
-         $"&end={end.ToString("yyyy-MM-ddTHH:mm:sszzz")}");
+         $"&start={start.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ss.fffZ")}" +
+         $"&end={end.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ss.fffZ")}");
     }
 }
