@@ -6,12 +6,19 @@
 
 @if (Parameters != null)
 {
-    @foreach (var parameter in Parameters)
-    {
-        <div class="col-3">
-            <LiveValueMainComponent Device="Device" Parameter="parameter"></LiveValueMainComponent>
+    <div class="row">
+        @foreach (var parameter in Parameters)
+        {
+            <div class="col-3">
+                <LiveValueMainComponent Device="Device" Parameter="parameter"></LiveValueMainComponent>
+            </div>
+        }
+        <div class="col-12">
+            <section>
+                Last update: @DateTime.Now.ToString("HH:mm:ss")
+            </section>
         </div>
-    }
+    </div>
 }
 
 
@@ -32,10 +39,10 @@
         {
             _timer = new();
             _timer.Interval = 60000; //TODO: const
-            
-            _timer.Elapsed+=Update;
-            
-            
+
+            _timer.Elapsed += Update;
+
+
             _timer.Start();
         }
     }
@@ -48,7 +55,7 @@
 
     public void Dispose()
     {
-        if (_timer!=null)
+        if (_timer != null)
             _timer.Dispose();
     }
 

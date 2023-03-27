@@ -10,3 +10,10 @@ span{
 h5{
     text-align: right;
 }
+
+section{
+    padding: 15px;
+    text-align: right;
+    color: #333;
+    font-size: 9pt;
+}

@@ -22,13 +22,12 @@ else
 @if (_parameters != null)
 {
     <div class="row">
-        <LiveMainParametersComponent Device="_device"
-                                Parameter="_parameters.Where(x => x.Priority == ParameterPriority.High)">
+        <div class="col-12">
+            <LiveMainParametersComponent Device="_device"
+                                         Parameters="_parameters.Where(x => x.Priority == ParameterPriority.High)">
 
-        </LiveMainParametersComponent>
-    </div>
-
-    <div class="row">
+            </LiveMainParametersComponent>
+        </div>
         @if (_charts != null)
         {
             foreach (Chart chart in _charts)
