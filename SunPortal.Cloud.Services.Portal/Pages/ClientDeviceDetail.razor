@@ -22,10 +22,10 @@ else
 @if (_parameters != null)
 {
     <div class="row">
-        <LiveValueMainComponent Device="_device"
+        <LiveMainParametersComponent Device="_device"
                                 Parameter="_parameters.Where(x => x.Priority == ParameterPriority.High)">
 
-        </LiveValueMainComponent>
+        </LiveMainParametersComponent>
     </div>
 
     <div class="row">
