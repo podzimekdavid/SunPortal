@@ -3,6 +3,7 @@ using Mapster;
 using Microsoft.EntityFrameworkCore;
 using SunPortal.Cloud.Lib.App;
 using SunPortal.Cloud.Lib.Interfaces;
+using SunPortal.Cloud.Lib.Models;
 using SunPortal.Cloud.Lib.Parameters;
 using SunPortal.Cloud.Service.Database.Adapters;
 using Client = SunPortal.Cloud.Lib.App.Client;
@@ -64,5 +65,56 @@ public class DevicesService : IDevicesService
     {
         return Task.FromResult<Device?>(_database.Devices.Include(x => x.SupportedDevice)
             .First(x => x.ClientDeviceId == deviceId).Adapt<Lib.App.Device>(DeviceAdapter.DTOConfig));
+    }
+
+    public Task<ClientSyncSettings> SyncSettings(Guid clientId)
+    {
+        ClientSyncSettings settings = new()
+        {
+            Interval = 75000 // TODO: add to database
+        };
+
+        foreach (var device in _database.Devices
+                     .Include(x => x.SupportedDevice)
+                     .ThenInclude(x => x.ParameterGroup)
+                     .ThenInclude(x => x.Parameters)
+                     .Where(x => x.ClientId == clientId))
+        {
+            List<int> parameters = new();
+
+            foreach (Parameter parameter in device.SupportedDevice.ParameterGroup.Parameters)
+            {
+                parameters.Add(parameter.ParameterId);
+            }
+
+            settings.Parameters.Add(device.Address, parameters);
+        }
+
+        return Task.FromResult(settings);
+    }
+
+    public Task DeviceSync(DeviceSyncPackage package)
+    {
+        var device =
+            _database.Devices.FirstOrDefault(x => x.ClientId == package.ClientId && x.Address == package.Address);
+
+        if (device == null)
+            return Task.CompletedTask;
+
+        foreach (KeyValuePair<int,byte[]> packageValue in package.Values)
+        {
+            _database.Logs.Add(new()
+            {
+                ClientDeviceId = device.ClientDeviceId,
+                DateTime = DateTimeOffset.Now,
+                ParameterId = packageValue.Key,
+                Value = packageValue.Value
+            });
+        }
+
+
+        _database.SaveChanges();
+        
+        return Task.CompletedTask;
     }
 }

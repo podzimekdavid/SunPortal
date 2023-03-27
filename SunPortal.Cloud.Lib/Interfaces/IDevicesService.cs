@@ -15,4 +15,6 @@ public interface IDevicesService
     public Task<Lib.App.Client?> Client(Guid clientId);
 
     public Task<Lib.App.Device?> Device(Guid deviceId);
+    public Task<Lib.App.ClientSyncSettings> SyncSettings(Guid clientId);
+    public Task DeviceSync(Lib.Models.DeviceSyncPackage package);
 }

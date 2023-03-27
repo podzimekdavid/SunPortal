@@ -1,6 +1,7 @@
 using System.Collections;
 using SunPortal.Cloud.Lib.App;
 using SunPortal.Cloud.Lib.Interfaces;
+using SunPortal.Cloud.Lib.Models;
 using SunPortal.Cloud.Lib.Parameters;
 
 namespace SunPortal.Cloud.Services.Portal.Services;
@@ -58,5 +59,15 @@ public class DevicesCommunicationService : IDevicesService
         return await _client
             .GetFromJsonAsync<Device>
                 ($"{Lib.Communication.Endpoints.DEVICE}?{DEVICE_ID_ATRIBUTE}{deviceId}");
+    }
+
+    public Task<ClientSyncSettings> SyncSettings(Guid clientId)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task DeviceSync(DeviceSyncPackage package)
+    {
+        throw new NotImplementedException();
     }
 }

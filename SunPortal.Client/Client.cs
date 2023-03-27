@@ -1,8 +1,11 @@
 ﻿using System.IO.Ports;
+using System.Timers;
+using Microsoft.AspNetCore.Http.Connections;
 using Microsoft.AspNetCore.SignalR.Client;
 using StuderReader;
 using SunPortal.Communication;
 using SunPortal.Communication.Packets;
+using Timer = System.Timers.Timer;
 
 namespace SunPortal.Client;
 
@@ -25,12 +28,18 @@ public class Client : IDisposable
     public async void Start()
     {
         _requests = new();
-        _hub = new HubConnectionBuilder().WithUrl($"{Url}{Connection.HUB_PATH}")
+        _hub = new HubConnectionBuilder().WithUrl($"{Url}{Connection.HUB_PATH}", options =>
+            {
+                options.Transports =
+                    HttpTransportType.WebSockets |
+                    HttpTransportType.LongPolling;
+            })
             .WithAutomaticReconnect(new[] {TimeSpan.Zero, TimeSpan.Zero, TimeSpan.FromSeconds(10)})
             .Build();
 
         _hub.On<ValueRequest>(Connection.ClientMethods.VALUE_REQUEST, ValueRequested);
         _hub.On<ChangeParameterRequest>(Connection.ClientMethods.CHANGE_PARAMETER_REQUEST, ChangeParameterRequested);
+        _hub.On<SyncSettings>(Connection.ClientMethods.SET_SYNC_SETTINGS, SetSyncSettings);
 
         await _hub.StartAsync();
 
@@ -38,15 +47,49 @@ public class Client : IDisposable
         Register();
     }
 
-    //public void CheckConnection()
-    // {
-    //     if (_hub.State != HubConnectionState.Connected)
-    //     {
-    //         Start();
-    //
-    //         Thread.Sleep(1000);
-    //     }
-    // }
+    private Timer? _timer;
+    private SyncSettings? _syncSettings;
+
+    private void SetSyncSettings(SyncSettings settings)
+    {
+        if (_timer != null)
+        {
+            _timer.Stop();
+        }
+
+        _timer = new();
+        _timer.Interval = settings.Interval;
+
+        _timer.Elapsed += SyncTimer;
+
+        _timer.Start();
+    }
+
+    private void SyncTimer(object? sender, ElapsedEventArgs e)
+    {
+        if (_syncSettings == null)
+            return;
+
+        foreach (KeyValuePair<int, IEnumerable<int>> device in _syncSettings.Parameters)
+        {
+            SyncPackage package = new()
+            {
+                Address = device.Key,
+                ClientId = ClientId
+            };
+
+            foreach (var parameter in device.Value)
+            {
+                var data = ReadValue((ushort) parameter, device.Key);
+
+                if (data == null)
+                    return;
+                package.Values.Add(parameter, data);
+            }
+
+            _hub.InvokeAsync(Connection.ServerMethods.SYNC, package).GetAwaiter().GetResult();
+        }
+    }
 
     public void CheckQueue()
     {
@@ -78,7 +121,6 @@ public class Client : IDisposable
             Console.ForegroundColor = ConsoleColor.DarkCyan;
             Console.WriteLine(request.ParameterId);
             Console.WriteLine(request.Address);
-            //Console.WriteLine(BitConverter.ToBoolean(request.Value, 0));
             Console.ResetColor();
         }
 
