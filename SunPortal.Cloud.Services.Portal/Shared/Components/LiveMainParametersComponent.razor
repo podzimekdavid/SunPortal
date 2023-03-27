@@ -1,8 +1,11 @@
 @using SunPortal.Cloud.Lib.Parameters
 @using SunPortal.Cloud.Lib.App
 @using System.Timers
+@using SunPortal.Cloud.Services.Portal.Services
+@using System.Reflection.Metadata
 
 @implements IDisposable
+@inject LiveValuesService Service
 
 @if (Parameters != null)
 {
@@ -13,7 +16,12 @@
                 <LiveValueMainComponent Device="Device" Parameter="parameter"></LiveValueMainComponent>
             </div>
         }
-        <div class="col-12">
+        <div class="col-1">
+            <section>
+                <MatIcon Icon="refresh" @onclick="Request"></MatIcon>
+            </section>
+        </div>
+        <div class="col-11">
             <section>
                 Last update: @DateTime.Now.ToString("HH:mm:ss")
             </section>
@@ -47,8 +55,27 @@
         }
     }
 
-    private async void Update(object? sender, ElapsedEventArgs e)
+    private void Update(object? sender, ElapsedEventArgs e)
     {
+        Request();
+    }
+
+    private async void Request()
+    {
+        foreach (var parameter in Parameters)
+        {
+            Service.SendRequest(new()
+            {
+                Address = Device.Address,
+                ClientId = Device.ClientId,
+                Parameter = parameter.ParameterId
+            },
+                new()
+                {
+                    DeviceId = Device.ClientDeviceId,
+                    Parameter = parameter.ParameterId
+                });
+        }
         await InvokeAsync(StateHasChanged);
     }
 
