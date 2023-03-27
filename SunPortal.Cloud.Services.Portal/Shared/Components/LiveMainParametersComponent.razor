@@ -1,0 +1,55 @@
+@using SunPortal.Cloud.Lib.Parameters
+@using SunPortal.Cloud.Lib.App
+@using System.Timers
+
+@implements IDisposable
+
+@if (Parameters != null)
+{
+    @foreach (var parameter in Parameters)
+    {
+        <div class="col-3">
+            <LiveValueMainComponent Device="Device" Parameter="parameter"></LiveValueMainComponent>
+        </div>
+    }
+}
+
+
+
+@code {
+
+    [Parameter]
+    public IEnumerable<DeviceParameter>? Parameters { get; set; }
+
+    [Parameter]
+    public Device Device { get; set; }
+
+    private Timer? _timer;
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (firstRender)
+        {
+            _timer = new();
+            _timer.Interval = 60000; //TODO: const
+            
+            _timer.Elapsed+=Update;
+            
+            
+            _timer.Start();
+        }
+    }
+
+    private async void Update(object? sender, ElapsedEventArgs e)
+    {
+        await InvokeAsync(StateHasChanged);
+    }
+
+
+    public void Dispose()
+    {
+        if (_timer!=null)
+            _timer.Dispose();
+    }
+
+}
