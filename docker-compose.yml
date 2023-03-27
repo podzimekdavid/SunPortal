@@ -87,7 +87,7 @@ services:
       - RABBITMQ_DEFAULT_USER=admin
       - RABBITMQ_DEFAULT_PASS=Z5qTm4D95Ezv3Sf7
     volumes:
-      - rabbitmq:/var/lib/rabbitmq
+      - rabbitmq_storage:/var/lib/rabbitmq
     healthcheck:
       test: [ "CMD", "rabbitmqctl", "status" ]
       interval: 10s
@@ -97,6 +97,6 @@ volumes:
   database_data:
   certs:
   portal_persistent_storage:
-  rabbitmq:
+  rabbitmq_storage:
   database_account:
 

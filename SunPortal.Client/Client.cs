@@ -62,7 +62,13 @@ public class Client : IDisposable
 
         _timer.Elapsed += SyncTimer;
 
+        if (_debug)
+            Console.WriteLine($"Downloaded setting for {settings.Parameters.Count} devices.");
+        
         _timer.Start();
+
+        if (_debug)
+            Console.WriteLine("Timer started");
     }
 
     private void SyncTimer(object? sender, ElapsedEventArgs e)
@@ -70,6 +76,9 @@ public class Client : IDisposable
         if (_syncSettings == null)
             return;
 
+        if (_debug)
+            Console.WriteLine($"{DateTime.Now} sync");
+        
         foreach (KeyValuePair<int, IEnumerable<int>> device in _syncSettings.Parameters)
         {
             SyncPackage package = new()

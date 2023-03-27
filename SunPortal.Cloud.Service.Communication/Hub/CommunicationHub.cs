@@ -26,17 +26,12 @@ public class CommunicationHub : Microsoft.AspNetCore.SignalR.Hub
         _communicationService.ResponseReceived(response);
     }
 
-    public async void Register(Guid clientId)
+    public void Register(Guid clientId)
     {
         _log.LogInformation($"Hub client register {clientId}");
         _communicationService.AddClient(Context.ConnectionId, clientId);
 
-        var syncSettings = await _databaseService.ClientSettings(clientId);
-
-        if (syncSettings != null)
-        {
-            await Clients.Caller.SendAsync(Connection.ClientMethods.SET_SYNC_SETTINGS, syncSettings);
-        }
+        _databaseService.ClientSettings(clientId, Context.ConnectionId);
     }
 
     public void Sync(SyncPackage package)
