@@ -111,6 +111,7 @@ builder.Services.AddScoped<LiveValuesService>();
 
 builder.Services.AddHttpClient();
 builder.Services.AddMatBlazor();
+builder.Services.AddScoped<DataService>();
 //builder.Services.AddHttpContextAccessor();
 
 builder.Services.Configure<ForwardedHeadersOptions>(options =>
