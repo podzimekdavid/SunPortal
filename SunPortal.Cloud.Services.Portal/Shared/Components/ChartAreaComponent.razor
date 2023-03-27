@@ -69,13 +69,13 @@
         {
             _primaryYParameterValues =
                 await DataService.FloatValues(DeviceId, Chart.PrimaryYParameter.ParameterId,
-                    DateTimeOffset.Now, DateTimeOffset.Now.AddHours(12));
+                    DateTimeOffset.Now.AddHours(-12), DateTimeOffset.Now);
 
             if (Chart.SecondaryYParameter != null)
             {
                 _secondaryYParameterValues =
                     await DataService.FloatValues(DeviceId, Chart.SecondaryYParameter.ParameterId,
-                        DateTimeOffset.Now, DateTimeOffset.Now.AddHours(12));
+                        DateTimeOffset.Now.AddHours(-12), DateTimeOffset.Now);
             }
 
             StateHasChanged();
