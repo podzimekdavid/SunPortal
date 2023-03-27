@@ -82,7 +82,7 @@ public class DevicesService : IDevicesService
         {
             List<int> parameters = new();
 
-            foreach (Parameter parameter in device.SupportedDevice.ParameterGroup.Parameters)
+            foreach (Parameter parameter in device.SupportedDevice.ParameterGroup.Parameters.Where(x => x.LogParameter))
             {
                 parameters.Add(parameter.ParameterId);
             }
@@ -101,7 +101,7 @@ public class DevicesService : IDevicesService
         if (device == null)
             return Task.CompletedTask;
 
-        foreach (KeyValuePair<int,byte[]> packageValue in package.Values)
+        foreach (KeyValuePair<int, byte[]> packageValue in package.Values)
         {
             _database.Logs.Add(new()
             {
@@ -114,7 +114,7 @@ public class DevicesService : IDevicesService
 
 
         _database.SaveChanges();
-        
+
         return Task.CompletedTask;
     }
 }
