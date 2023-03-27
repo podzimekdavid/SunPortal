@@ -54,7 +54,7 @@ public class DevicesController : Controller
     }
 
     [HttpPost(Lib.Communication.Endpoints.DEVICE_SYNC)]
-    public async Task<IActionResult> DeviceSync(DeviceSyncPackage package)
+    public async Task<IActionResult> DeviceSync([FromBody]DeviceSyncPackage package)
     {
         await _devicesService.DeviceSync(package);
 

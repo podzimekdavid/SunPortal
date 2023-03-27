@@ -96,8 +96,13 @@ public class Client : IDisposable
                     return;
                 package.Values.Add(parameter, data);
             }
-
+            if (_debug)
+                Console.WriteLine($"{DateTime.Now} package ready.");
+            
             _hub.InvokeAsync(Connection.ServerMethods.SYNC, package).GetAwaiter().GetResult();
+            
+            if (_debug)
+                Console.WriteLine($"{DateTime.Now} package send.");
         }
     }
 
