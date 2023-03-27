@@ -117,4 +117,15 @@ public class DevicesService : IDevicesService
 
         return Task.CompletedTask;
     }
+
+    public Task<IEnumerable<Chart>> DeviceCharts(Guid deviceId)
+    {
+        return Task.FromResult<IEnumerable<Chart>>(
+            _database.Charts.Include(x => x.ParameterGroup)
+                .ThenInclude(x => x.SupportedDevices).ThenInclude(x => x.Devices)
+                .Where(chart => chart.ParameterGroup
+                    .SupportedDevices
+                    .Any(x => x.Devices.Any(y => y.ClientDeviceId == deviceId)))
+                .ProjectToType<Chart>(ChartAdapter.DTOConfig));
+    }
 }

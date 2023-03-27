@@ -11,6 +11,7 @@ public class DatabaseContext : DbContext
     public DbSet<ParameterGroup> ParameterGroups { get; set; }
     public DbSet<SupportedDevice> SupportedDevices { get; set; }
     public DbSet<GroupChart> Charts { get; set; }
+    public DbSet<ClientSharing> Sharing { get; set; }
 
     public DatabaseContext(DbContextOptions<DatabaseContext> options) : base(options)
     {

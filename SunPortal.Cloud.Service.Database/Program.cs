@@ -14,6 +14,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<DatabaseContext>();
+builder.Services.AddScoped<DataService>();
 
 builder.Services.AddScoped<IDevicesService, DevicesService>();
 

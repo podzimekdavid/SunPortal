@@ -48,7 +48,7 @@
 
 @if (_clients != null)
 {
-    <h3>Clients</h3>
+    <h3>My setups</h3>
     <MatTable Items="@_clients" class="mat-elevation-z5" ShowPaging="false" UseSortHeaderRow="true" AllowSelection="true" SelectionChanged="SelectionChangedEvent">
         <MatTableHeader>
             <MatSortHeaderRow>
@@ -87,11 +87,54 @@ else
     <span>Loading...</span>
 }
 
+@if (_sharedClients != null)
+{
+    <h3>Shared with me</h3>
+    <MatTable Items="@_clients" class="mat-elevation-z5" ShowPaging="false" UseSortHeaderRow="true" AllowSelection="true" SelectionChanged="SelectionChangedEvent">
+        <MatTableHeader>
+            <MatSortHeaderRow>
+                <MatSortHeader SortId="name">
+                    <span style="width:200px">Name</span>
+                </MatSortHeader>
+                <MatSortHeader SortId="count">
+                    <span style="width:200px">Devices count</span>
+                </MatSortHeader>
+                <MatSortHeader SortId="count">
+                    <span style="width:200px">Allowed IP address</span>
+                </MatSortHeader>
+                <MatSortHeader SortId="id">
+                    <span>Id</span>
+                </MatSortHeader>
+            </MatSortHeaderRow>
+        </MatTableHeader>
+        <MatTableRow>
+            <td>
+                @context.Name <MatIcon Icon="open_in_new" Style="vertical-align: bottom"></MatIcon>
+            </td>
+            <td>
+                @context.DevicesCount
+            </td>
+            <td>
+                @context.AllowedIpAddress
+            </td>
+            <td>
+                @context.ClientId
+            </td>
+        </MatTableRow>
+    </MatTable>
+}
+else
+{
+    <span>Loading...</span>
+}
+
+<ChartComponent></ChartComponent>
 
 
 @code{
 
     private IEnumerable<Client>? _clients;
+    private IEnumerable<Client>? _sharedClients;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {

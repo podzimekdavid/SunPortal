@@ -53,6 +53,12 @@ public class DevicesController : Controller
         return _devicesService.SyncSettings(clientId).Result;
     }
 
+    [HttpGet(Lib.Communication.Endpoints.DEVICE_CHARTS)]
+    public IEnumerable<Lib.App.Chart>? DeviceCharts(Guid deviceId)
+    {
+        return _devicesService.DeviceCharts(deviceId).Result;
+    }
+
     [HttpPost(Lib.Communication.Endpoints.DEVICE_SYNC)]
     public async Task<IActionResult> DeviceSync([FromBody]DeviceSyncPackage package)
     {

@@ -17,4 +17,5 @@ public interface IDevicesService
     public Task<Lib.App.Device?> Device(Guid deviceId);
     public Task<Lib.App.ClientSyncSettings> SyncSettings(Guid clientId);
     public Task DeviceSync(Lib.Models.DeviceSyncPackage package);
+    public Task<IEnumerable<Lib.App.Chart>?> DeviceCharts(Guid deviceId);
 }

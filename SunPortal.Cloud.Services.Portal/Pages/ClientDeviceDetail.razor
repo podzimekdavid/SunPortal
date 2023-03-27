@@ -3,6 +3,7 @@
 @using SunPortal.Cloud.Lib.App
 @using SunPortal.Cloud.Lib.Interfaces
 @using SunPortal.Cloud.Lib.Parameters
+@using SunPortal.Cloud.Lib.UI
 
 @inject IDevicesService DevicesService
 
@@ -27,6 +28,26 @@ else
                 <LiveValueMainComponent Device="_device" Parameter="parameter"></LiveValueMainComponent>
             </div>
         }
+        
+        @if (_charts != null)
+        {
+            foreach (Chart chart in _charts)
+            {
+                <div class="col-4">
+                    @switch (chart.ChartType)
+                    {
+                        case ChartType.Line:
+                            <ChartAreaComponent Chart="chart" DeviceId="DeviceId"></ChartAreaComponent>
+                            break;
+                        case ChartType.Percentage:
+                            break;
+                        default:
+                            throw new ArgumentOutOfRangeException();
+                    }
+                </div>
+            }
+        }
+        
     </div>
     <MatDivider Inset="true"></MatDivider>
     <h4>Actions</h4>
@@ -142,6 +163,7 @@ else
     public string? DeviceId { get; set; }
 
     private IEnumerable<DeviceParameter>? _parameters;
+    private IEnumerable<Chart>? _charts;
     private Device? _device;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -150,6 +172,7 @@ else
         {
             var id = Guid.Parse(DeviceId);
 
+            _charts = await DevicesService.DeviceCharts(id);
             _parameters = await DevicesService.ParametersByDevice(id);
             _device = await DevicesService.Device(id);
 

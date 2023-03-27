@@ -70,4 +70,11 @@ public class DevicesCommunicationService : IDevicesService
     {
         throw new NotImplementedException();
     }
+
+    public async Task<IEnumerable<Chart>?> DeviceCharts(Guid deviceId)
+    {
+        return await _client
+            .GetFromJsonAsync<IEnumerable<Chart>>
+                ($"{Lib.Communication.Endpoints.DEVICE_CHARTS}?{DEVICE_ID_ATRIBUTE}{deviceId}");
+    }
 }

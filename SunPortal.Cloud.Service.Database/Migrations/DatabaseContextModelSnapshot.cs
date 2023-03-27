@@ -67,6 +67,29 @@ namespace SunPortal.Cloud.Service.Database.Migrations
                     b.ToTable("Devices");
                 });
 
+            modelBuilder.Entity("SunPortal.Cloud.Service.Database.Data.ClientSharing", b =>
+                {
+                    b.Property<int>("ClientSharingId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ClientSharingId"));
+
+                    b.Property<Guid>("ClientId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTimeOffset>("Created")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("ClientSharingId");
+
+                    b.ToTable("Sharing");
+                });
+
             modelBuilder.Entity("SunPortal.Cloud.Service.Database.Data.DeviceLog", b =>
                 {
                     b.Property<int>("DeviceLogId")
@@ -84,9 +107,9 @@ namespace SunPortal.Cloud.Service.Database.Migrations
                     b.Property<int>("ParameterId")
                         .HasColumnType("integer");
 
-                    b.Property<string>("Value")
+                    b.Property<byte[]>("Value")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("bytea");
 
                     b.HasKey("DeviceLogId");
 
@@ -105,10 +128,20 @@ namespace SunPortal.Cloud.Service.Database.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("GroupChartId"));
 
+                    b.Property<int>("ChartType")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<int>("ParameterGroupId")
                         .HasColumnType("integer");
 
-                    b.Property<int>("YParameterId")
+                    b.Property<int>("PrimaryYParameterId")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("SecondaryYParameterId")
                         .HasColumnType("integer");
 
                     b.Property<int>("YType")
@@ -118,7 +151,9 @@ namespace SunPortal.Cloud.Service.Database.Migrations
 
                     b.HasIndex("ParameterGroupId");
 
-                    b.HasIndex("YParameterId");
+                    b.HasIndex("PrimaryYParameterId");
+
+                    b.HasIndex("SecondaryYParameterId");
 
                     b.ToTable("Charts");
                 });
@@ -252,15 +287,21 @@ namespace SunPortal.Cloud.Service.Database.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SunPortal.Cloud.Service.Database.Data.Parameter", "YParameter")
+                    b.HasOne("SunPortal.Cloud.Service.Database.Data.Parameter", "PrimaryYParameter")
                         .WithMany()
-                        .HasForeignKey("YParameterId")
+                        .HasForeignKey("PrimaryYParameterId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("SunPortal.Cloud.Service.Database.Data.Parameter", "SecondaryYParameter")
+                        .WithMany()
+                        .HasForeignKey("SecondaryYParameterId");
+
                     b.Navigation("ParameterGroup");
 
-                    b.Navigation("YParameter");
+                    b.Navigation("PrimaryYParameter");
+
+                    b.Navigation("SecondaryYParameter");
                 });
 
             modelBuilder.Entity("SunPortal.Cloud.Service.Database.Data.Parameter", b =>

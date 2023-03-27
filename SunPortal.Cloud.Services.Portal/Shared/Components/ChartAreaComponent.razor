@@ -1,0 +1,85 @@
+@using ApexCharts
+@using SunPortal.Cloud.Lib.App
+@using SunPortal.Cloud.Lib.UI
+@using SunPortal.Cloud.Services.Portal.Services
+@using Chart = SunPortal.Cloud.Lib.App.Chart
+
+@inject DataService DataService
+
+@if (Chart != null)
+{
+    if (Chart.SecondaryYParameter != null && _secondaryYParameterValues != null)
+    {
+        <ApexChart TItem="ChartTimeValue"
+                   Title="@Chart.Name">
+
+            <ApexPointSeries TItem="ChartTimeValue"
+                             Items="_primaryYParameterValues"
+                             SeriesType="SeriesType.Area"
+                             Name="@Chart.PrimaryYParameter.Description"
+                             XValue="@(e => e.DateTime)"
+                             YValue="@(e => (decimal) e.Value)"
+                             OrderByDescending="@(e => e.X)" ShowDataLabels/>
+
+            <ApexPointSeries TItem="ChartTimeValue"
+                             Items="_secondaryYParameterValues"
+                             SeriesType="SeriesType.Area"
+                             Name="@Chart.SecondaryYParameter.Description"
+                             XValue="@(e => e.DateTime)"
+                             YValue="@(e => (decimal) e.Value)"
+                             OrderByDescending="@(e => e.X)" ShowDataLabels/>
+        </ApexChart>
+    }
+    else
+    {
+        if (_primaryYParameterValues != null)
+        {
+            <ApexChart TItem="ChartTimeValue"
+                       Title="@Chart.Name">
+
+                <ApexPointSeries TItem="ChartTimeValue"
+                                 Items="_primaryYParameterValues"
+                                 SeriesType="SeriesType.Area"
+                                 Name="Gross Value"
+                                 XValue="@(e => e.DateTime)"
+                                 YValue="@(e => (decimal) e.Value)"
+                                 OrderByDescending="@(e => e.X)" ShowDataLabels/>
+
+
+            </ApexChart>
+        }
+    }
+}
+
+@code {
+
+    [Parameter]
+    public Guid DeviceId { get; set; }
+
+    [Parameter]
+    public Chart? Chart { get; set; }
+
+    private IEnumerable<ChartTimeValue>? _primaryYParameterValues;
+    private IEnumerable<ChartTimeValue>? _secondaryYParameterValues;
+
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            _primaryYParameterValues =
+                await DataService.FloatValues(DeviceId, Chart.PrimaryYParameter.ParameterId,
+                    DateTimeOffset.Now, DateTimeOffset.Now.AddHours(12));
+
+            if (Chart.SecondaryYParameter != null)
+            {
+                _secondaryYParameterValues =
+                    await DataService.FloatValues(DeviceId, Chart.SecondaryYParameter.ParameterId,
+                        DateTimeOffset.Now, DateTimeOffset.Now.AddHours(12));
+            }
+
+            StateHasChanged();
+        }
+    }
+
+}
