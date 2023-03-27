@@ -37,7 +37,7 @@ else
                     @switch (chart.ChartType)
                     {
                         case ChartType.Line:
-                            <ChartAreaComponent Chart="chart" DeviceId="DeviceId"></ChartAreaComponent>
+                            <ChartAreaComponent Chart="chart" DeviceId="Guid.Parse(DeviceId)"></ChartAreaComponent>
                             break;
                         case ChartType.Percentage:
                             break;
