@@ -78,7 +78,7 @@ services:
       - "80:80"
       - "443:443"
   rabbitmq:
-    image: rabbitmq:3.9-management
+    image: rabbitmq:3-management
     container_name: rabbitmq
     restart: always
     ports:
