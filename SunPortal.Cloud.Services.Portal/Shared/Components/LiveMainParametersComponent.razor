@@ -18,12 +18,12 @@
         }
         <div class="col-1">
             <section>
-                <MatIcon Icon="refresh" @onclick="Request"></MatIcon>
+                
             </section>
         </div>
         <div class="col-11">
             <section>
-                Last update: @DateTime.Now.ToString("HH:mm:ss")
+                <MatIcon Icon="refresh" @onclick="Request" Style="vertical-align: bottom;font-size: 9pt"></MatIcon> Last update: @DateTime.Now.ToString("HH:mm:ss")
             </section>
         </div>
     </div>

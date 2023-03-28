@@ -17,29 +17,38 @@
     {
         if (firstRender)
         {
-            try
-            {
-                var result = _r.Matches(Options);
+        }
+    }
 
-                foreach (Match match in result)
+    protected override void OnParametersSet()
+    {
+        ParseData();
+    }
+
+    private void ParseData()
+    {
+        try
+        {
+            var result = _r.Matches(Options);
+
+            foreach (Match match in result)
+            {
+                if (match.Groups.Count > 2)
                 {
-                    if (match.Groups.Count > 2)
+                    if (match.Groups[1].Value == EnumValue)
                     {
-                        if (match.Groups[1].Value == EnumValue)
-                        {
-                            _text = match.Groups[2].Value;
-                            
-                            StateHasChanged();
-                            
-                            return;
-                        }
+                        _text = match.Groups[2].Value;
+
+                        StateHasChanged();
+
+                        return;
                     }
                 }
             }
-            catch (Exception)
-            {
-                // ignored
-            }
+        }
+        catch (Exception)
+        {
+    // ignored
         }
     }
 

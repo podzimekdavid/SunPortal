@@ -17,4 +17,6 @@ RUN dotnet publish "SunPortal.Cloud.Service.Database.csproj" -c Release -o /app/
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+ENV TZ Europe/Prague
+
 ENTRYPOINT ["dotnet", "SunPortal.Cloud.Service.Database.dll"]

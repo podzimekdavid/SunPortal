@@ -17,4 +17,6 @@ RUN dotnet publish "SunPortal.Cloud.Proxy.csproj" -c Release -o /app/publish
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+ENV TZ Europe/Prague
+
 ENTRYPOINT ["dotnet", "SunPortal.Cloud.Proxy.dll"]

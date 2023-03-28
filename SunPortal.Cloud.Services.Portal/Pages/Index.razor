@@ -10,7 +10,7 @@
 @inject UserManager<IdentityUser> UserManager
 @inject NavigationManager NavigationManager
 
-<div class="mat-elevation-z5 mdc-theme--surface">
+<div class="mat-elevation-z5 mdc-theme--surface" style="margin-bottom: 15px">
     <MatTabGroup>
             <MatTab>
                 <LabelContent>
@@ -48,7 +48,7 @@
 
 @if (_clients != null)
 {
-    <h3>My setups</h3>
+    <h3>My client</h3>
     <MatTable Items="@_clients" class="mat-elevation-z5" ShowPaging="false" UseSortHeaderRow="true" AllowSelection="true" SelectionChanged="SelectionChangedEvent">
         <MatTableHeader>
             <MatSortHeaderRow>
@@ -128,13 +128,12 @@ else
     <span>Loading...</span>
 }
 
-<ChartComponent></ChartComponent>
 
 
 @code{
 
     private IEnumerable<Client>? _clients;
-    private IEnumerable<Client>? _sharedClients;
+    private IEnumerable<Client>? _sharedClients = new List<Client>();
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
