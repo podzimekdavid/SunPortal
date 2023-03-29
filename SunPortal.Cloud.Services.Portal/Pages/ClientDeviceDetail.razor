@@ -32,7 +32,7 @@ else
         {
             foreach (Chart chart in _charts)
             {
-                <div class="col-6">
+                <div class="col-@chart.Size">
                     @switch (chart.ChartType)
                     {
                         case ChartType.Line:

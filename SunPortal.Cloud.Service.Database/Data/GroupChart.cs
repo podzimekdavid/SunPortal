@@ -6,6 +6,7 @@ public class GroupChart
 {
     public int GroupChartId { get; set; }
     public string Name { get; set; }
+    public int Size { get; set; }
     
     public ChartTypeYValue YType { get; set; }
     public ChartType ChartType { get; set; }
