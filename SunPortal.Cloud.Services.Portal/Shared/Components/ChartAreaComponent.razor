@@ -18,7 +18,7 @@
                              Items="_primaryYParameterValues"
                              SeriesType="SeriesType.Area"
                              Name="@Chart.PrimaryYParameter.Description"
-                             XValue="@(e => e.DateTime.ToUnixTimeMilliseconds())"
+                             XValue="@(e => e.DateTime.AddHours(2).ToUnixTimeMilliseconds())"
                              YValue="@(e => (decimal) e.Value)"
                              OrderByDescending="@(e => e.X)" />
 
@@ -26,7 +26,7 @@
                              Items="_secondaryYParameterValues"
                              SeriesType="SeriesType.Area"
                              Name="@Chart.SecondaryYParameter.Description"
-                             XValue="@(e => e.DateTime.ToUnixTimeMilliseconds())"
+                             XValue="@(e => e.DateTime.AddHours(2).ToUnixTimeMilliseconds())"
                              YValue="@(e => (decimal) e.Value)"
                              OrderByDescending="@(e => e.X)" />
         </ApexChart>
@@ -43,7 +43,7 @@
                                  Items="_primaryYParameterValues"
                                  SeriesType="SeriesType.Area"
                                  Name="@Chart.PrimaryYParameter.Description"
-                                 XValue="@(e => e.DateTime.ToUnixTimeMilliseconds())"
+                                 XValue="@(e => e.DateTime.AddHours(2).ToUnixTimeMilliseconds())"
                                  YValue="@(e => (decimal) e.Value)"
                                  OrderByDescending="@(e => e.X)" />
 
