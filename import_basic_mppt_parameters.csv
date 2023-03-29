@@ -1,0 +1,108 @@
+﻿parameterid;description;Type;ParameterGroupId;Level;Mode;Unit
+11000;Battery voltage;0;2;0;0;V
+11001;Battery current;0;2;0;0;A
+11002;Voltage of the PV generator;0;2;0;0;V
+11003;Current of the PV generator;0;2;0;0;A
+11004;Power of the PV generator;0;2;0;0;kW
+11005;Battery temperature;0;2;0;0;°C
+11006;Production in (Ah) for the current day;0;2;0;0;Ah
+11007;Production in (kWh) for the current day;0;2;0;0;kWh
+11008;Produced energy resettable counter;0;2;0;0;kWh
+11009;Total produced energy;0;2;0;0;MWh
+11010;Production in (Ah) for the previous day;0;2;0;0;Ah
+11011;Production in (Wh) for the previous day;0;2;0;0;kWh
+11012;Number of parameters (in code);0;2;0;0;
+11013;Number of parameters (in flash);0;2;0;0;
+11014;Number of infos users;0;2;0;0;
+11015;Model of VarioTrack;3;2;0;0;"0:VT-80
+1:VT-65
+2:VT-40
+3:VT-HV"
+11016;Operating mode;3;2;0;0;"0:Night
+1:StartUp
+2:---3:Charger
+4:---5:Security
+6:OFF
+7:---8:Charge
+9:Charge V
+10:Charge I
+11:Charge T
+12:Ch. Ibsp"
+11017;Max PV voltage for the current day;0;2;0;0;V
+11018;Max battery current of the current day;0;2;0;0;A
+11019;Max power production for the current day;0;2;0;0;kW
+11020;Max battery voltage for the current day;0;2;0;0;V
+11021;Min battery voltage for the current day;0;2;0;0;V
+11025;Number of irradiation hours for the current day;0;2;0;0;h
+11026;Number of irradiation hours for the previous day;0;2;0;0;h
+11034;Type of error;3;2;0;0;"0:No Error
+1:BatOverV
+2:Earth
+3:No Batt
+4:OverTemp
+5:BatOverV
+6:PvOverV
+7:Others
+8:---9:---10:---11:---12:HardErr"
+11037;Number of days before next equalization;0;2;0;0;days
+11038;Battery cycle phase;3;2;0;0;"0:Bulk
+1:Absorpt.
+2:Equalize
+3:0ing
+4:---5:---6:R.0.
+7:Per.abs.
+8:---9:---10:---11:---"
+11039;Battery voltage (minute avg);0;2;0;0;V
+11040;Battery current (minute avg);0;2;0;0;A
+11041;PV voltage (minute avg);0;2;0;0;V
+11043;PV power (minute avg);0;2;0;0;kW
+11044;Battery temperature (minute avg);0;2;0;0;°C
+11045;Electronic temperature 1 (minute avg);0;2;0;0;°C
+11046;Electronic temperature 2 (minute avg);0;2;0;0;°C
+11047;ID type;0;2;0;0;
+11048;ID batt voltage;0;2;0;0;V
+11049;ID HW;0;2;0;0;
+11050;ID SOFT msb;0;2;0;0;
+11051;ID SOFT lsb;0;2;0;0;
+11052;ID SID;0;2;0;0;
+11061;State of auxiliary relay 1;3;2;0;0;"0:Opened
+1:Closed"
+11062;State of auxiliary relay 2;3;2;0;0;"0:Opened
+1:Closed"
+11063;Relay aux 1 mode;3;2;0;0;"0:---1:A
+2:I
+3:M
+4:M
+5:G"
+11064;Relay aux 2 mode;3;2;0;0;"0:---1:A
+2:I
+3:M
+4:M
+5:G"
+11066;Synchronisation state;3;2;0;0;"0:---1:---2:---3:---4:XTslave
+5:VTslave
+6:---7:---8:VTmaster
+9:Autonom.
+10:VSslave
+11:VSmaster"
+11067;ID FID msb;0;2;0;0;
+11068;ID FID lsb;0;2;0;0;
+11069;State of the VarioTrack;3;2;0;0;"0:Off
+1:On"
+11076;Local daily communication error counter (CAN);0;2;0;0;
+11077;State of auxiliary relay 3;3;2;0;0;"0:Opened
+1:Closed"
+11078;State of auxiliary relay 4;3;2;0;0;"0:Opened
+1:Closed"
+11079;Relay aux 3 mode;3;2;0;0;"0:---1:A
+2:I
+3:M
+4:M
+5:G"
+11080;Relay aux 4 mode;3;2;0;0;"0:---1:A
+2:I
+3:M
+4:M
+5:G"
+11082;Remote entry state;3;2;0;0;"0:RM EN 0
+1:RM EN 1"

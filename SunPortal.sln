@@ -27,6 +27,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Scripts", "Scripts", "{D557
 		.gitignore = .gitignore
 		deploy.sh = deploy.sh
 		import_basic_parameters.csv = import_basic_parameters.csv
+		import_basic_mppt_parameters.csv = import_basic_mppt_parameters.csv
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SunPortal.Cloud.Proxy", "SunPortal.Cloud.Proxy\SunPortal.Cloud.Proxy.csproj", "{B7DF9F0A-9CDF-49B7-BEEB-A69178672761}"
