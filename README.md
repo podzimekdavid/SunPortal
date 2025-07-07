@@ -13,7 +13,7 @@ The entire project was developed in about one week. While it is not perfect or p
 ## Key Features
 
 - Modular microservices architecture for scalability and maintainability  
-- Communication via RabbitMQ and MQTT messaging brokers  
+- Communication via RabbitMQ messaging brokers 
 - Real-time server-client communication using SignalR and HTTP requests  
 - Integration with industrial PLC hardware (UniPi Patron)  
 - Support for solar inverter and MPPT data collection  
