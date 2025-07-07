@@ -25,6 +25,10 @@ The entire project was developed in about one week. While it is not perfect or p
 
 - [UniPi Patron S107-P370](https://www.unipi.technology/cs/unipi-patron-s107-p370) — industrial PLC acting as a client device  
 - Studer devices (inverters, MPPT solar controllers)
-
 ---
 
+## Acknowledgments
+
+Special thanks to [Kyberna](https://kyberna.cz/) for lending the hardware used during development.
+
+---
