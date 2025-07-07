@@ -1,6 +1,6 @@
 # SunPortal
 
-SunPortal is a conceptual microservices-based system designed for monitoring and controlling solar power installations. The system architecture facilitates communication between services using RabbitMQ and MQTT protocols.
+SunPortal is a conceptual microservices-based system designed for monitoring and controlling solar power installations. The system architecture facilitates communication between services using RabbitMQ and Http protocols.
 
 For interaction between the server and client devices, SignalR or HTTP requests are used. The client devices are based on the [UniPi Patron S107-P370](https://www.unipi.technology/cs/unipi-patron-s107-p370), an industrial-grade PLC (Programmable Logic Controller) platform.
 
